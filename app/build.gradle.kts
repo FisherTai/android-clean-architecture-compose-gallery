@@ -66,7 +66,18 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+
+    // Network
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.moshi)
+    implementation(libs.moshi)
+    implementation(libs.moshi.kotlin)
+    ksp(libs.moshi.kotlin.codegen)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
+
     testImplementation(libs.junit)
+    testImplementation(libs.okhttp.mockwebserver)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
