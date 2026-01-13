@@ -15,6 +15,7 @@ import io.mockk.unmockkStatic
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
@@ -55,10 +56,76 @@ class PhotoRepositoryImplTest {
         // When
         val result = repository.getPhotos().first()
 
-        // Then
-        // We verify that the repository correctly orchestrates the Pager creation
-        // and emits a PagingData object. Detailed data content verification is handled
-        // in Mediator and Mapper tests.
-        assertNotNull(result)
-    }
-}
+                // Then
+
+                // We verify that the repository correctly orchestrates the Pager creation
+
+                // and emits a PagingData object. Detailed data content verification is handled
+
+                // in Mediator and Mapper tests.
+
+                assertNotNull(result)
+
+            }
+
+        
+
+            @Test
+
+            fun `getPhotoById should return mapped photo from DAO`() = runBlocking {
+
+                // Given
+
+                val id = "1"
+
+                val entity = PhotoEntity(
+
+                    id = id,
+
+                    width = 100,
+
+                    height = 100,
+
+                    url = "url",
+
+                    blurHash = null,
+
+                    description = "desc",
+
+                    authorName = "author",
+
+                                authorUsername = "user",
+
+                                authorProfileImage = "profile"
+
+                            )
+
+                            coEvery { database.photoDao().getPhotoById(any<String>()) } returns entity
+
+                    
+
+                            repository = PhotoRepositoryImpl(apiService, database)
+
+                    
+
+        
+
+                // When
+
+                val result = repository.getPhotoById(id).first()
+
+        
+
+                // Then
+
+                assertNotNull(result)
+
+                assertEquals(id, result?.id)
+
+                assertEquals("desc", result?.description)
+
+            }
+
+        }
+
+        

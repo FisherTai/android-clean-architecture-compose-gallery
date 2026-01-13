@@ -13,6 +13,7 @@ import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.Unsp
 import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.Photo
 import com.ftwingman.android_clean_architecture_compose_gallery.domain.repository.PhotoRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import timber.log.Timber
 import javax.inject.Inject
@@ -38,5 +39,10 @@ class PhotoRepositoryImpl @Inject constructor(
         ).flow.map { pagingData ->
             pagingData.map { it.toDomain() }
         }
+    }
+
+    override fun getPhotoById(id: String): Flow<Photo?> = flow {
+        val entity = database.photoDao().getPhotoById(id)
+        emit(entity?.toDomain())
     }
 }

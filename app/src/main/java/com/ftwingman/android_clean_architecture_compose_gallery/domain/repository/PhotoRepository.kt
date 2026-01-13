@@ -15,4 +15,11 @@ interface PhotoRepository {
      * @return 返回圖片列表的分頁數據 Flow
      */
     fun getPhotos(): Flow<PagingData<Photo>>
+
+    /**
+     * 根據 ID 獲取圖片詳情。
+     * @param id 圖片唯一識別碼
+     * @return 返回圖片詳情的 Flow (若找不到則回傳 null)
+     */
+    fun getPhotoById(id: String): Flow<Photo?>
 }

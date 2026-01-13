@@ -16,6 +16,9 @@ interface PhotoDao {
     @Query("SELECT * FROM photos")
     fun getPagingSource(): PagingSource<Int, PhotoEntity>
 
+    @Query("SELECT * FROM photos WHERE id = :id")
+    suspend fun getPhotoById(id: String): PhotoEntity?
+
     @Query("DELETE FROM photos")
     suspend fun clearAll()
 }
