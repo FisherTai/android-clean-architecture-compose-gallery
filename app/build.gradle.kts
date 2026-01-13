@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 val localProperties = Properties().apply {
@@ -67,6 +68,7 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.timber)
     ksp(libs.hilt.compiler)
 

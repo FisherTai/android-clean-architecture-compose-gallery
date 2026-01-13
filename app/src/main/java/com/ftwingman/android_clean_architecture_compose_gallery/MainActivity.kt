@@ -15,8 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.Photo
 import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.User
+import com.ftwingman.android_clean_architecture_compose_gallery.presentation.navigation.Route
 import com.ftwingman.android_clean_architecture_compose_gallery.presentation.photo_list.PhotoListScreen
 import com.ftwingman.android_clean_architecture_compose_gallery.presentation.photo_list.components.PhotoItem
 import com.ftwingman.android_clean_architecture_compose_gallery.ui.theme.AndroidcleanarchitecturecomposegalleryTheme
@@ -29,9 +34,29 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AndroidcleanarchitecturecomposegalleryTheme {
+                val navController = rememberNavController()
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Box(modifier = Modifier.padding(innerPadding)) {
-                        PhotoListScreen(viewModel = hiltViewModel())
+                        NavHost(
+                            navController = navController,
+                            startDestination = Route.PhotoList
+                        ) {
+                            composable<Route.PhotoList> {
+                                PhotoListScreen(
+                                    viewModel = hiltViewModel(),
+                                    onPhotoClick = { photo ->
+                                        navController.navigate(Route.PhotoDetail(photo.id))
+                                    }
+                                )
+                            }
+                            composable<Route.PhotoDetail> { backStackEntry ->
+                                val detail: Route.PhotoDetail = backStackEntry.toRoute()
+                                // Temporary stub for Detail Screen
+                                Box(modifier = Modifier.fillMaxSize(), contentAlignment = androidx.compose.ui.Alignment.Center) {
+                                    Text(text = "Photo Detail: ${detail.photoId}")
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -66,6 +91,7 @@ fun PhotoItemPreview() {
                     profileImage = "https://pic.616pic.com/ys_bnew_img/00/20/31/PfCAgYoVAA.jpg"
                 )
             ),
+            onPhotoClick = {},
             modifier = Modifier.width(200.dp)
         )
     }

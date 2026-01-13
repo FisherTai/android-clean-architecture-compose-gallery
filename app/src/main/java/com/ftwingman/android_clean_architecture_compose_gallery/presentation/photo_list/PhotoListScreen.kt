@@ -28,18 +28,21 @@ import com.ftwingman.android_clean_architecture_compose_gallery.presentation.pho
 
 @Composable
 fun PhotoListScreen(
-    viewModel: PhotoListViewModel
+    viewModel: PhotoListViewModel,
+    onPhotoClick: (Photo) -> Unit
 ) {
     val photos = viewModel.photoPagingData.collectAsLazyPagingItems()
     
     PhotoListContent(
-        photos = photos
+        photos = photos,
+        onPhotoClick = onPhotoClick
     )
 }
 
 @Composable
 fun PhotoListContent(
     photos: LazyPagingItems<Photo>,
+    onPhotoClick: (Photo) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier.fillMaxSize()) {
@@ -52,7 +55,10 @@ fun PhotoListContent(
         ) {
             items(photos.itemCount) { index ->
                 photos[index]?.let { photo ->
-                    PhotoItem(photo = photo)
+                    PhotoItem(
+                        photo = photo,
+                        onPhotoClick = { onPhotoClick(photo) }
+                    )
                 }
             }
 

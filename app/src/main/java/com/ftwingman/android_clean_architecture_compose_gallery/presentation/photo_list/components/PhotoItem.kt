@@ -30,9 +30,11 @@ import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.Pho
 @Composable
 fun PhotoItem(
     photo: Photo,
+    onPhotoClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     ElevatedCard(
+        onClick = onPhotoClick,
         modifier = modifier
             .fillMaxWidth()
             .padding(4.dp),
