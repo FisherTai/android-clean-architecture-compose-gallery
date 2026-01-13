@@ -24,6 +24,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.ftwingman.android_clean_architecture_compose_gallery.R
 import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.Photo
 
 @Composable
@@ -44,9 +45,11 @@ fun PhotoItem(
                     .crossfade(true)
                     .build(),
                 contentDescription = photo.description,
+                placeholder = painterResource(R.drawable.ic_launcher_background),
+                error = painterResource(R.drawable.ic_launcher_background),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp), // Initial fixed height, Paging 3 will handle staggered
+                    .height(200.dp),
                 contentScale = ContentScale.Crop
             )
             
@@ -61,6 +64,8 @@ fun PhotoItem(
                     AsyncImage(
                         model = photo.author.profileImage,
                         contentDescription = null,
+                        placeholder = painterResource(R.drawable.ic_launcher_background),
+                        error = painterResource(R.drawable.ic_launcher_background),
                         modifier = Modifier
                             .size(24.dp)
                             .clip(CircleShape),

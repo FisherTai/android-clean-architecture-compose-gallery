@@ -54,14 +54,14 @@ fun PhotoItemPreview() {
                 id = "1",
                 width = 100,
                 height = 100,
-                url = "https://example.com/photo.jpg",
+                url = "https://pic.616pic.com/ys_bnew_img/00/20/31/PfCAgYoVAA.jpg",
                 blurHash = null,
                 description = "A beautiful sunset",
                 author = User(
                     id = "u1",
                     username = "johndoe",
                     name = "John Doe",
-                    profileImage = "https://example.com/user.jpg"
+                    profileImage = "https://pic.616pic.com/ys_bnew_img/00/20/31/PfCAgYoVAA.jpg"
                 )
             ),
             modifier = Modifier.width(200.dp)
