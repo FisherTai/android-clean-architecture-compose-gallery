@@ -8,6 +8,7 @@ data class PhotoDto(
     val id: String,
     val width: Int,
     val height: Int,
+    val color: String?,
     val description: String?,
     @Json(name = "blur_hash")
     val blurHash: String?,

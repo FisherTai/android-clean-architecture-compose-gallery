@@ -18,6 +18,7 @@ class PhotoModelTest {
             height = 200,
             url = "url",
             thumbnailUrl = "thumb",
+            color = "#000000",
             blurHash = "hash",
             description = "desc",
             author = user

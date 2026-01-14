@@ -48,7 +48,6 @@ class PhotoRepositoryImplTest {
     fun `getPhotos should return non-null PagingData flow`() = runBlocking {
         // Given
         every { database.photoDao() } returns photoDao
-        // Mocking PagingSource is tricky, but Pager just needs it to exist
         every { photoDao.getPagingSource() } returns mockk<PagingSource<Int, PhotoEntity>>(relaxed = true)
 
         repository = PhotoRepositoryImpl(apiService, database)
@@ -56,80 +55,37 @@ class PhotoRepositoryImplTest {
         // When
         val result = repository.getPhotos().first()
 
-                // Then
+        // Then
+        assertNotNull(result)
+    }
 
-                // We verify that the repository correctly orchestrates the Pager creation
+    @Test
+    fun `getPhotoById should return mapped photo from DAO`() = runBlocking {
+        // Given
+        val id = "1"
+        val entity = PhotoEntity(
+            id = id,
+            width = 100,
+            height = 100,
+            url = "url",
+            thumbnailUrl = "thumb",
+            color = "#000000",
+            blurHash = null,
+            description = "desc",
+            authorName = "author",
+            authorUsername = "user",
+            authorProfileImage = "profile"
+        )
+        coEvery { database.photoDao().getPhotoById(any<String>()) } returns entity
 
-                // and emits a PagingData object. Detailed data content verification is handled
+        repository = PhotoRepositoryImpl(apiService, database)
 
-                // in Mediator and Mapper tests.
+        // When
+        val result = repository.getPhotoById(id).first()
 
-                assertNotNull(result)
-
-            }
-
-        
-
-            @Test
-
-            fun `getPhotoById should return mapped photo from DAO`() = runBlocking {
-
-                // Given
-
-                val id = "1"
-
-                val entity = PhotoEntity(
-
-                    id = id,
-
-                                width = 100,
-
-                                height = 100,
-
-                                url = "url",
-
-                                thumbnailUrl = "thumb",
-
-                                blurHash = null,
-
-                                description = "desc",
-
-                                authorName = "author",
-
-                    
-
-                                authorUsername = "user",
-
-                                authorProfileImage = "profile"
-
-                            )
-
-                            coEvery { database.photoDao().getPhotoById(any<String>()) } returns entity
-
-                    
-
-                            repository = PhotoRepositoryImpl(apiService, database)
-
-                    
-
-        
-
-                // When
-
-                val result = repository.getPhotoById(id).first()
-
-        
-
-                // Then
-
-                assertNotNull(result)
-
-                assertEquals(id, result?.id)
-
-                assertEquals("desc", result?.description)
-
-            }
-
-        }
-
-        
+        // Then
+        assertNotNull(result)
+        assertEquals(id, result?.id)
+        assertEquals("desc", result?.description)
+    }
+}

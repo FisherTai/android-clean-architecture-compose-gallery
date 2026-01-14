@@ -13,6 +13,7 @@ class PhotoEntityTest {
             height = 200,
             url = "url",
             thumbnailUrl = "thumb",
+            color = "#FFFFFF",
             blurHash = "hash",
             description = "desc",
             authorName = "author",

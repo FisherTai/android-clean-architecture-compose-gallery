@@ -59,6 +59,7 @@ class PhotoRemoteMediatorTest {
             id = "1",
             width = 100,
             height = 200,
+            color = "#000000",
             description = "desc",
             blurHash = "hash",
             urls = PhotoUrlsDto("raw", "full", "reg", "small", "thumb"),

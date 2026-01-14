@@ -12,6 +12,7 @@ fun PhotoDto.toDomain(): Photo {
         height = height,
         url = urls.regular,
         thumbnailUrl = urls.small,
+        color = color,
         blurHash = blurHash,
         description = description,
         author = User(
@@ -30,6 +31,7 @@ fun PhotoDto.toEntity(): PhotoEntity {
         height = height,
         url = urls.regular,
         thumbnailUrl = urls.small,
+        color = color,
         blurHash = blurHash,
         description = description,
         authorName = user.name,
@@ -45,6 +47,7 @@ fun PhotoEntity.toDomain(): Photo {
         height = height,
         url = url,
         thumbnailUrl = thumbnailUrl,
+        color = color,
         blurHash = blurHash,
         description = description,
         author = User(

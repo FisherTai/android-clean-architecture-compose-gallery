@@ -16,6 +16,7 @@ class PhotoMapperTest {
             id = "1",
             width = 100,
             height = 200,
+            color = "#000000",
             description = "desc",
             blurHash = "hash",
             urls = PhotoUrlsDto(raw = "", full = "", regular = "url", small = "small", thumb = ""),
@@ -32,6 +33,7 @@ class PhotoMapperTest {
         assertEquals("1", domain.id)
         assertEquals(100, domain.width)
         assertEquals(200, domain.height)
+        assertEquals("#000000", domain.color)
         assertEquals("desc", domain.description)
         assertEquals("hash", domain.blurHash)
         assertEquals("url", domain.url)
@@ -48,6 +50,7 @@ class PhotoMapperTest {
             id = "1",
             width = 100,
             height = 200,
+            color = "#000000",
             description = "desc",
             blurHash = "hash",
             urls = PhotoUrlsDto(raw = "", full = "", regular = "url", small = "small", thumb = ""),
@@ -64,6 +67,7 @@ class PhotoMapperTest {
         assertEquals("1", entity.id)
         assertEquals(100, entity.width)
         assertEquals(200, entity.height)
+        assertEquals("#000000", entity.color)
         assertEquals("desc", entity.description)
         assertEquals("hash", entity.blurHash)
         assertEquals("url", entity.url)
@@ -81,6 +85,7 @@ class PhotoMapperTest {
             height = 200,
             url = "url",
             thumbnailUrl = "small",
+            color = "#000000",
             blurHash = "hash",
             description = "desc",
             authorName = "name",
@@ -93,6 +98,7 @@ class PhotoMapperTest {
         assertEquals("1", domain.id)
         assertEquals(100, domain.width)
         assertEquals(200, domain.height)
+        assertEquals("#000000", domain.color)
         assertEquals("desc", domain.description)
         assertEquals("hash", domain.blurHash)
         assertEquals("url", domain.url)

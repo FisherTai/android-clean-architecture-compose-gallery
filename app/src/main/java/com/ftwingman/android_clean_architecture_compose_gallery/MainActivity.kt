@@ -94,6 +94,7 @@ fun PhotoItemPreview() {
                 width = 100,
                 height = 100,
                 url = "https://pic.616pic.com/ys_bnew_img/00/20/31/PfCAgYoVAA.jpg",
+                thumbnailUrl = "https://pic.616pic.com/ys_bnew_img/00/20/31/PfCAgYoVAA.jpg",
                 blurHash = null,
                 description = "A beautiful sunset",
                 author = User(

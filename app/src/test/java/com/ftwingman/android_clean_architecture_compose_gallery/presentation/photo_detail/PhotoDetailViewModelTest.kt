@@ -48,6 +48,7 @@ class PhotoDetailViewModelTest {
             height = 100,
             url = "url",
             thumbnailUrl = "thumb",
+            color = "#000000",
             blurHash = null,
             description = "desc",
             author = User("u1", "user", "name", "profile")

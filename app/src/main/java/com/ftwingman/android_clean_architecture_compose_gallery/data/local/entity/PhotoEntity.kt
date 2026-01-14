@@ -13,6 +13,7 @@ data class PhotoEntity(
     val url: String,
     @ColumnInfo(name = "thumbnail_url")
     val thumbnailUrl: String,
+    val color: String?,
     val blurHash: String?,
     val description: String?,
     val authorName: String,
