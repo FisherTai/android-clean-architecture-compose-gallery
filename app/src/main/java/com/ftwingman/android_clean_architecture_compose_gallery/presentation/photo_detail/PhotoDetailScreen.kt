@@ -34,9 +34,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.ftwingman.android_clean_architecture_compose_gallery.R
 import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.Photo
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
@@ -77,6 +79,7 @@ fun PhotoDetailScreen(
                 with(sharedTransitionScope) {
                     PhotoDetailContent(
                         photo = currentPhoto,
+                        thumbnailUrl = viewModel.thumbnailUrl,
                         animatedVisibilityScope = animatedVisibilityScope
                     )
                 }
@@ -91,6 +94,7 @@ fun PhotoDetailScreen(
 @Composable
 fun SharedTransitionScope.PhotoDetailContent(
     photo: Photo,
+    thumbnailUrl: String,
     animatedVisibilityScope: AnimatedVisibilityScope,
     modifier: Modifier = Modifier
 ) {
@@ -102,6 +106,8 @@ fun SharedTransitionScope.PhotoDetailContent(
         AsyncImage(
             model = photo.url,
             contentDescription = photo.description,
+            placeholder = coil.compose.rememberAsyncImagePainter(thumbnailUrl),
+            error = coil.compose.rememberAsyncImagePainter(thumbnailUrl),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(500.dp)
@@ -132,6 +138,7 @@ fun SharedTransitionScope.PhotoDetailContent(
                 AsyncImage(
                     model = photo.author.profileImage,
                     contentDescription = null,
+                    placeholder = painterResource(R.drawable.ic_launcher_background),
                     modifier = Modifier
                         .size(48.dp)
                         .clip(CircleShape),

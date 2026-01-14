@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity() {
                                     PhotoListScreen(
                                         viewModel = hiltViewModel(),
                                         onPhotoClick = { photo ->
-                                            navController.navigate(Route.PhotoDetail(photo.id))
+                                            navController.navigate(Route.PhotoDetail(photo.id, photo.thumbnailUrl))
                                         },
                                         animatedVisibilityScope = this,
                                         sharedTransitionScope = this@SharedTransitionLayout

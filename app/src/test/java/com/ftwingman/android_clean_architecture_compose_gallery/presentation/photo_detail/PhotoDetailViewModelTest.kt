@@ -26,7 +26,8 @@ class PhotoDetailViewModelTest {
     private val repository = mockk<PhotoRepository>()
     private val testDispatcher = StandardTestDispatcher()
     private val photoId = "test_id"
-    private val savedStateHandle = SavedStateHandle(mapOf("photoId" to photoId))
+    private val thumbnailUrl = "thumb_url"
+    private val savedStateHandle = SavedStateHandle(mapOf("photoId" to photoId, "thumbnailUrl" to thumbnailUrl))
 
     @Before
     fun setup() {

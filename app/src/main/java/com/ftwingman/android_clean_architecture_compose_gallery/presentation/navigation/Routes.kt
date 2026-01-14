@@ -7,5 +7,5 @@ sealed class Route {
     data object PhotoList : Route()
 
     @Serializable
-    data class PhotoDetail(val photoId: String) : Route()
+    data class PhotoDetail(val photoId: String, val thumbnailUrl: String) : Route()
 }

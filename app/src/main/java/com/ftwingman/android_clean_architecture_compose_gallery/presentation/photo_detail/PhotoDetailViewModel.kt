@@ -18,6 +18,7 @@ class PhotoDetailViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val photoId: String = checkNotNull(savedStateHandle["photoId"])
+    val thumbnailUrl: String = checkNotNull(savedStateHandle["thumbnailUrl"])
 
     val photo: StateFlow<Photo?> = repository.getPhotoById(photoId)
         .stateIn(
