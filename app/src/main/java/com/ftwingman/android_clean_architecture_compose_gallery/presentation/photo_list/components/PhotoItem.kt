@@ -6,6 +6,7 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -39,17 +41,26 @@ fun PhotoItem(
     sharedTransitionScope: SharedTransitionScope? = null,
     animatedVisibilityScope: AnimatedVisibilityScope? = null
 ) {
+    val backgroundColor = try {
+        photo.color?.let { Color(android.graphics.Color.parseColor(it)) } ?: Color.Transparent
+    } catch (e: Exception) {
+        Color.Transparent
+    }
+
     ElevatedCard(
         onClick = onPhotoClick,
         modifier = modifier
             .fillMaxWidth()
             .padding(4.dp),
-        shape = MaterialTheme.shapes.medium
+        shape = MaterialTheme.shapes.medium,
+        colors = androidx.compose.material3.CardDefaults.elevatedCardColors(
+            containerColor = backgroundColor.copy(alpha = 0.1f) // Light tint of dominant color
+        )
     ) {
         Column {
             val imageModifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
+                .aspectRatio(photo.width.toFloat() / photo.height.toFloat())
 
             val sharedModifier = if (sharedTransitionScope != null && animatedVisibilityScope != null) {
                 with(sharedTransitionScope) {
@@ -71,7 +82,7 @@ fun PhotoItem(
                 placeholder = painterResource(R.drawable.ic_launcher_background),
                 error = painterResource(R.drawable.ic_launcher_background),
                 modifier = sharedModifier,
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.FillWidth
             )
             
             Column(
