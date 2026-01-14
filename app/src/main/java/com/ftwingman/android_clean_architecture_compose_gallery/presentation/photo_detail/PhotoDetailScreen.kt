@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.Photo
@@ -103,21 +104,30 @@ fun SharedTransitionScope.PhotoDetailContent(
             contentDescription = photo.description,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(400.dp)
+                .height(500.dp)
                 .sharedElement(
                     sharedContentState = rememberSharedContentState(key = "photo_${photo.id}"),
                     animatedVisibilityScope = animatedVisibilityScope
                 ),
-            contentScale = ContentScale.Fit
+            contentScale = ContentScale.Crop
         )
 
         Column(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(24.dp)
                 .fillMaxWidth()
         ) {
+            Text(
+                text = photo.description ?: "No description",
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.SemiBold
+            )
+            
+            Spacer(modifier = Modifier.height(24.dp))
+            
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
             ) {
                 AsyncImage(
                     model = photo.author.profileImage,
@@ -139,14 +149,6 @@ fun SharedTransitionScope.PhotoDetailContent(
                         color = MaterialTheme.colorScheme.secondary
                     )
                 }
-            }
-
-            photo.description?.let { desc ->
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = desc,
-                    style = MaterialTheme.typography.bodyLarge
-                )
             }
             
             Spacer(modifier = Modifier.height(24.dp))
