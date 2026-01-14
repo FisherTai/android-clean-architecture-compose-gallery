@@ -1,5 +1,8 @@
 package com.ftwingman.android_clean_architecture_compose_gallery.presentation.photo_list.components
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,11 +30,14 @@ import coil.request.ImageRequest
 import com.ftwingman.android_clean_architecture_compose_gallery.R
 import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.Photo
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun PhotoItem(
     photo: Photo,
     onPhotoClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    sharedTransitionScope: SharedTransitionScope? = null,
+    animatedVisibilityScope: AnimatedVisibilityScope? = null
 ) {
     ElevatedCard(
         onClick = onPhotoClick,
@@ -41,6 +47,21 @@ fun PhotoItem(
         shape = MaterialTheme.shapes.medium
     ) {
         Column {
+            val imageModifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+
+            val sharedModifier = if (sharedTransitionScope != null && animatedVisibilityScope != null) {
+                with(sharedTransitionScope) {
+                    imageModifier.sharedElement(
+                        sharedContentState = rememberSharedContentState(key = "photo_${photo.id}"),
+                        animatedVisibilityScope = animatedVisibilityScope
+                    )
+                }
+            } else {
+                imageModifier
+            }
+
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(photo.url)
@@ -49,9 +70,7 @@ fun PhotoItem(
                 contentDescription = photo.description,
                 placeholder = painterResource(R.drawable.ic_launcher_background),
                 error = painterResource(R.drawable.ic_launcher_background),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp),
+                modifier = sharedModifier,
                 contentScale = ContentScale.Crop
             )
             

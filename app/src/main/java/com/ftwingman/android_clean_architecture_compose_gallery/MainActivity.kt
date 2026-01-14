@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -30,6 +32,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalSharedTransitionApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -38,25 +41,31 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Box(modifier = Modifier.padding(innerPadding)) {
-                        NavHost(
-                            navController = navController,
-                            startDestination = Route.PhotoList
-                        ) {
-                            composable<Route.PhotoList> {
-                                PhotoListScreen(
-                                    viewModel = hiltViewModel(),
-                                    onPhotoClick = { photo ->
-                                        navController.navigate(Route.PhotoDetail(photo.id))
-                                    }
-                                )
-                            }
-                            composable<Route.PhotoDetail> {
-                                PhotoDetailScreen(
-                                    viewModel = hiltViewModel(),
-                                    onBackClick = {
-                                        navController.popBackStack()
-                                    }
-                                )
+                        SharedTransitionLayout {
+                            NavHost(
+                                navController = navController,
+                                startDestination = Route.PhotoList
+                            ) {
+                                composable<Route.PhotoList> {
+                                    PhotoListScreen(
+                                        viewModel = hiltViewModel(),
+                                        onPhotoClick = { photo ->
+                                            navController.navigate(Route.PhotoDetail(photo.id))
+                                        },
+                                        animatedVisibilityScope = this,
+                                        sharedTransitionScope = this@SharedTransitionLayout
+                                    )
+                                }
+                                composable<Route.PhotoDetail> {
+                                    PhotoDetailScreen(
+                                        viewModel = hiltViewModel(),
+                                        onBackClick = {
+                                            navController.popBackStack()
+                                        },
+                                        animatedVisibilityScope = this,
+                                        sharedTransitionScope = this@SharedTransitionLayout
+                                    )
+                                }
                             }
                         }
                     }
@@ -75,6 +84,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 }
 
 @Preview(showBackground = true)
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun PhotoItemPreview() {
     AndroidcleanarchitecturecomposegalleryTheme {

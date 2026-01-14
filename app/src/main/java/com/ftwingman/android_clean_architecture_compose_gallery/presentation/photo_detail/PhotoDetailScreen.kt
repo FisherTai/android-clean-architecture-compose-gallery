@@ -1,5 +1,8 @@
 package com.ftwingman.android_clean_architecture_compose_gallery.presentation.photo_detail
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,11 +38,13 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.Photo
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun PhotoDetailScreen(
     viewModel: PhotoDetailViewModel,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    sharedTransitionScope: SharedTransitionScope
 ) {
     val photo by viewModel.photo.collectAsState()
 
@@ -68,7 +73,12 @@ fun PhotoDetailScreen(
                 .fillMaxSize()
         ) {
             photo?.let { currentPhoto ->
-                PhotoDetailContent(photo = currentPhoto)
+                with(sharedTransitionScope) {
+                    PhotoDetailContent(
+                        photo = currentPhoto,
+                        animatedVisibilityScope = animatedVisibilityScope
+                    )
+                }
             } ?: run {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
@@ -76,9 +86,11 @@ fun PhotoDetailScreen(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun PhotoDetailContent(
+fun SharedTransitionScope.PhotoDetailContent(
     photo: Photo,
+    animatedVisibilityScope: AnimatedVisibilityScope,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -91,7 +103,11 @@ fun PhotoDetailContent(
             contentDescription = photo.description,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(400.dp),
+                .height(400.dp)
+                .sharedElement(
+                    sharedContentState = rememberSharedContentState(key = "photo_${photo.id}"),
+                    animatedVisibilityScope = animatedVisibilityScope
+                ),
             contentScale = ContentScale.Fit
         )
 

@@ -1,5 +1,8 @@
 package com.ftwingman.android_clean_architecture_compose_gallery.presentation.photo_list
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,23 +29,31 @@ import com.ftwingman.android_clean_architecture_compose_gallery.R
 import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.Photo
 import com.ftwingman.android_clean_architecture_compose_gallery.presentation.photo_list.components.PhotoItem
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun PhotoListScreen(
     viewModel: PhotoListViewModel,
-    onPhotoClick: (Photo) -> Unit
+    onPhotoClick: (Photo) -> Unit,
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    sharedTransitionScope: SharedTransitionScope
 ) {
     val photos = viewModel.photoPagingData.collectAsLazyPagingItems()
     
-    PhotoListContent(
-        photos = photos,
-        onPhotoClick = onPhotoClick
-    )
+    with(sharedTransitionScope) {
+        PhotoListContent(
+            photos = photos,
+            onPhotoClick = onPhotoClick,
+            animatedVisibilityScope = animatedVisibilityScope
+        )
+    }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun PhotoListContent(
+fun SharedTransitionScope.PhotoListContent(
     photos: LazyPagingItems<Photo>,
     onPhotoClick: (Photo) -> Unit,
+    animatedVisibilityScope: AnimatedVisibilityScope,
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier.fillMaxSize()) {
@@ -57,7 +68,9 @@ fun PhotoListContent(
                 photos[index]?.let { photo ->
                     PhotoItem(
                         photo = photo,
-                        onPhotoClick = { onPhotoClick(photo) }
+                        onPhotoClick = { onPhotoClick(photo) },
+                        animatedVisibilityScope = animatedVisibilityScope,
+                        sharedTransitionScope = this@PhotoListContent
                     )
                 }
             }
