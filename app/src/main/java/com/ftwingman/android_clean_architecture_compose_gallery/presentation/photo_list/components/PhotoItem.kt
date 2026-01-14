@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Column
@@ -70,15 +71,13 @@ fun PhotoItem(
                 scaleY = scale
             },
         shape = MaterialTheme.shapes.medium,
-        interactionSource = interactionSource,
-        colors = androidx.compose.material3.CardDefaults.elevatedCardColors(
-            containerColor = backgroundColor.copy(alpha = 0.1f)
-        )
+        interactionSource = interactionSource
     ) {
         Column {
             val imageModifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(photo.width.toFloat() / photo.height.toFloat())
+                .background(backgroundColor) // Apply dominant color here
 
             val sharedModifier = if (sharedTransitionScope != null && animatedVisibilityScope != null) {
                 with(sharedTransitionScope) {
@@ -97,8 +96,6 @@ fun PhotoItem(
                     .crossfade(true)
                     .build(),
                 contentDescription = photo.description,
-                placeholder = painterResource(R.drawable.ic_launcher_background),
-                error = painterResource(R.drawable.ic_launcher_background),
                 modifier = sharedModifier,
                 contentScale = ContentScale.FillWidth
             )
