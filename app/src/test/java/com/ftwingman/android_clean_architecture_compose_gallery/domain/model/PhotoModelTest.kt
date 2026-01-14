@@ -13,12 +13,13 @@ class PhotoModelTest {
             profileImage = "https://example.com/profile.jpg"
         )
         val photo = Photo(
-            id = "photo1",
+            id = "1",
             width = 100,
             height = 200,
-            url = "https://example.com/photo.jpg",
-            blurHash = "L6Pj0?00%mNG.Vj[9Ftk~pNG00?7",
-            description = "A beautiful photo",
+            url = "url",
+            thumbnailUrl = "thumb",
+            blurHash = "hash",
+            description = "desc",
             author = user
         )
 

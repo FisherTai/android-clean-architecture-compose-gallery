@@ -23,7 +23,9 @@ object DatabaseModule {
             context,
             InfiniteMuseDatabase::class.java,
             "infinite_muse.db"
-        ).build()
+        )
+            .fallbackToDestructiveMigration(true)
+            .build()
     }
 
     @Provides

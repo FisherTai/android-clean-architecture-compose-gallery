@@ -82,17 +82,21 @@ class PhotoRepositoryImplTest {
 
                     id = id,
 
-                    width = 100,
+                                width = 100,
 
-                    height = 100,
+                                height = 100,
 
-                    url = "url",
+                                url = "url",
 
-                    blurHash = null,
+                                thumbnailUrl = "thumb",
 
-                    description = "desc",
+                                blurHash = null,
 
-                    authorName = "author",
+                                description = "desc",
+
+                                authorName = "author",
+
+                    
 
                                 authorUsername = "user",
 

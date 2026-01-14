@@ -9,6 +9,7 @@ data class Photo(
     val width: Int,
     val height: Int,
     val url: String,
+    val thumbnailUrl: String,
     val blurHash: String?,
     val description: String?,
     val author: User

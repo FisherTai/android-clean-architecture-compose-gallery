@@ -42,6 +42,7 @@ class PhotoDaoTest {
                 width = 100,
                 height = 200,
                 url = "url1",
+                thumbnailUrl = "thumb1",
                 blurHash = "hash1",
                 description = "desc1",
                 authorName = "name1",

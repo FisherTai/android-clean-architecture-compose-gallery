@@ -12,6 +12,7 @@ class PhotoEntityTest {
             width = 100,
             height = 200,
             url = "url",
+            thumbnailUrl = "thumb",
             blurHash = "hash",
             description = "desc",
             authorName = "author",
@@ -23,6 +24,7 @@ class PhotoEntityTest {
         assertEquals(100, entity.width)
         assertEquals(200, entity.height)
         assertEquals("url", entity.url)
+        assertEquals("thumb", entity.thumbnailUrl)
         assertEquals("hash", entity.blurHash)
         assertEquals("desc", entity.description)
         assertEquals("author", entity.authorName)

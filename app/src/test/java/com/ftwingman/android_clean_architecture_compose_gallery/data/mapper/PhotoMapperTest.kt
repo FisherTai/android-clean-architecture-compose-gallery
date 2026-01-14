@@ -18,7 +18,7 @@ class PhotoMapperTest {
             height = 200,
             description = "desc",
             blurHash = "hash",
-            urls = PhotoUrlsDto(raw = "", full = "", regular = "url", small = "", thumb = ""),
+            urls = PhotoUrlsDto(raw = "", full = "", regular = "url", small = "small", thumb = ""),
             user = UserDto(
                 id = "u1",
                 username = "username",
@@ -35,6 +35,7 @@ class PhotoMapperTest {
         assertEquals("desc", domain.description)
         assertEquals("hash", domain.blurHash)
         assertEquals("url", domain.url)
+        assertEquals("small", domain.thumbnailUrl)
         assertEquals("u1", domain.author.id)
         assertEquals("username", domain.author.username)
         assertEquals("name", domain.author.name)
@@ -49,7 +50,7 @@ class PhotoMapperTest {
             height = 200,
             description = "desc",
             blurHash = "hash",
-            urls = PhotoUrlsDto(raw = "", full = "", regular = "url", small = "", thumb = ""),
+            urls = PhotoUrlsDto(raw = "", full = "", regular = "url", small = "small", thumb = ""),
             user = UserDto(
                 id = "u1",
                 username = "username",
@@ -66,6 +67,7 @@ class PhotoMapperTest {
         assertEquals("desc", entity.description)
         assertEquals("hash", entity.blurHash)
         assertEquals("url", entity.url)
+        assertEquals("small", entity.thumbnailUrl)
         assertEquals("name", entity.authorName)
         assertEquals("username", entity.authorUsername)
         assertEquals("profile", entity.authorProfileImage)
@@ -78,6 +80,7 @@ class PhotoMapperTest {
             width = 100,
             height = 200,
             url = "url",
+            thumbnailUrl = "small",
             blurHash = "hash",
             description = "desc",
             authorName = "name",

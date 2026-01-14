@@ -1,5 +1,6 @@
 package com.ftwingman.android_clean_architecture_compose_gallery.data.local.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -10,6 +11,8 @@ data class PhotoEntity(
     val width: Int,
     val height: Int,
     val url: String,
+    @ColumnInfo(name = "thumbnail_url")
+    val thumbnailUrl: String,
     val blurHash: String?,
     val description: String?,
     val authorName: String,
