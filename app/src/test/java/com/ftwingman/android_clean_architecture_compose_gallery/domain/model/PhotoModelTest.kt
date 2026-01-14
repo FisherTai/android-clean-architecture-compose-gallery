@@ -23,7 +23,7 @@ class PhotoModelTest {
             author = user
         )
 
-        assertEquals("photo1", photo.id)
+        assertEquals("1", photo.id)
         assertEquals("photographer", photo.author.username)
     }
 }

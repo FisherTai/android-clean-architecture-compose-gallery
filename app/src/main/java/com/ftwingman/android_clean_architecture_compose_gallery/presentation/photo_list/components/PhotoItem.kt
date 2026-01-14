@@ -64,7 +64,7 @@ fun PhotoItem(
 
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(photo.url)
+                    .data(photo.thumbnailUrl)
                     .crossfade(true)
                     .build(),
                 contentDescription = photo.description,
