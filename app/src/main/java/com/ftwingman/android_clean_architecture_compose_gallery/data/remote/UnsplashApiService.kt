@@ -13,6 +13,11 @@ interface UnsplashApiService {
         @Query("order_by") orderBy: String = "latest"
     ): List<PhotoDto>
 
+    @GET("/photos/{id}")
+    suspend fun getPhotoDetail(
+        @retrofit2.http.Path("id") id: String
+    ): PhotoDto
+
     companion object {
         const val BASE_URL = "https://api.unsplash.com/"
     }

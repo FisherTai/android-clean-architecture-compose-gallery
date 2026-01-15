@@ -8,6 +8,7 @@ import androidx.paging.map
 import com.ftwingman.android_clean_architecture_compose_gallery.data.local.InfiniteMuseDatabase
 import com.ftwingman.android_clean_architecture_compose_gallery.data.local.dao.PhotoDao
 import com.ftwingman.android_clean_architecture_compose_gallery.data.mapper.toDomain
+import com.ftwingman.android_clean_architecture_compose_gallery.data.mapper.toEntity
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.PhotoRemoteMediator
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.UnsplashApiService
 import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.Photo
@@ -44,5 +45,17 @@ class PhotoRepositoryImpl @Inject constructor(
     override fun getPhotoById(id: String): Flow<Photo?> = flow {
         val entity = database.photoDao().getPhotoById(id)
         emit(entity?.toDomain())
+    }
+
+    override suspend fun refreshPhotoDetail(id: String) {
+        try {
+            val dto = apiService.getPhotoDetail(id)
+            val entity = dto.toEntity()
+            // We use insertAll (OnConflictStrategy.REPLACE) to update the existing record
+            database.photoDao().insertAll(listOf(entity))
+        } catch (e: Exception) {
+            Timber.e(e, "Error refreshing photo detail for id: $id")
+            // We suppress the error here as the UI will still show cached data
+        }
     }
 }

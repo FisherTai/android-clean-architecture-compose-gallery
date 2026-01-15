@@ -22,4 +22,10 @@ interface PhotoRepository {
      * @return 返回圖片詳情的 Flow (若找不到則回傳 null)
      */
     fun getPhotoById(id: String): Flow<Photo?>
+
+    /**
+     * 強制從網路重新獲取圖片詳情並更新至資料庫。
+     * @param id 圖片唯一識別碼
+     */
+    suspend fun refreshPhotoDetail(id: String)
 }
