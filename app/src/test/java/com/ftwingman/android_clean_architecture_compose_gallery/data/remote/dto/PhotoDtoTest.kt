@@ -18,6 +18,7 @@ class PhotoDtoTest {
                 "id": "1",
                 "width": 100,
                 "height": 200,
+                "color": "#000000",
                 "description": "test description",
                 "blur_hash": "test blur hash",
                 "urls": {
@@ -36,6 +37,10 @@ class PhotoDtoTest {
                         "medium": "test profile image",
                         "large": "test large"
                     }
+                },
+                "links": {
+                    "html": "test html",
+                    "download": "test download"
                 }
             }
         """.trimIndent()

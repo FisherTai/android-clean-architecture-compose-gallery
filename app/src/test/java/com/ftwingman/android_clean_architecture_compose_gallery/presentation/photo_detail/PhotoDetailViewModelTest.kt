@@ -57,6 +57,7 @@ class PhotoDetailViewModelTest {
             downloadUrl = "download"
         )
         every { repository.getPhotoById(photoId) } returns flowOf(photo)
+        io.mockk.coEvery { repository.refreshPhotoDetail(any()) } returns Unit
 
         // When
         val viewModel = PhotoDetailViewModel(repository, savedStateHandle)

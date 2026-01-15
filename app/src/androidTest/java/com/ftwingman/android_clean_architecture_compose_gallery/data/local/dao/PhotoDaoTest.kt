@@ -43,11 +43,20 @@ class PhotoDaoTest {
                 height = 200,
                 url = "url1",
                 thumbnailUrl = "thumb1",
+                color = "#FFFFFF",
                 blurHash = "hash1",
                 description = "desc1",
                 authorName = "name1",
                 authorUsername = "user1",
-                authorProfileImage = "profile1"
+                authorProfileImage = "profile1",
+                exifMake = null,
+                exifModel = null,
+                exifExposureTime = null,
+                exifAperture = null,
+                exifFocalLength = null,
+                exifIso = null,
+                unsplashUrl = null,
+                downloadUrl = null
             )
         )
         photoDao.insertAll(photos)

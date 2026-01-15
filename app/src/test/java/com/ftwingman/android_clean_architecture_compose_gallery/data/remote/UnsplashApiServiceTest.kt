@@ -45,6 +45,7 @@ class UnsplashApiServiceTest {
                     "id": "1",
                     "width": 100,
                     "height": 200,
+                    "color": "#000000",
                     "description": "test",
                     "blur_hash": "hash",
                     "urls": {
@@ -63,6 +64,10 @@ class UnsplashApiServiceTest {
                             "medium": "m",
                             "large": "l"
                         }
+                    },
+                    "links": {
+                        "html": "html",
+                        "download": "download"
                     }
                 }
             ]
