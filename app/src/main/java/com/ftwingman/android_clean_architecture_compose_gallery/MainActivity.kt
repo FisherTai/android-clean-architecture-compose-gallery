@@ -56,58 +56,34 @@ class MainActivity : ComponentActivity() {
 
             AndroidcleanarchitecturecomposegalleryTheme(darkTheme = isDarkTheme) {
                 val navController = rememberNavController()
-                val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-                Scaffold(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .nestedScroll(scrollBehavior.nestedScrollConnection),
-                    topBar = {
-                        CenterAlignedTopAppBar(
-                            title = {
-                                Text(
-                                    text = "Infinite Muse",
-                                    style = MaterialTheme.typography.titleLarge
-                                )
-                            },
-                            actions = {
-                                IconButton(onClick = { isDarkTheme = !isDarkTheme }) {
-                                    Icon(
-                                        imageVector = if (isDarkTheme) Icons.Default.LightMode else Icons.Default.DarkMode,
-                                        contentDescription = "Toggle Theme"
-                                    )
-                                }
-                            },
-                            scrollBehavior = scrollBehavior
-                        )
-                    }
-                ) { innerPadding ->
-                    Box(modifier = Modifier.padding(innerPadding)) {
-                        SharedTransitionLayout {
-                            NavHost(
-                                navController = navController,
-                                startDestination = Route.PhotoList
-                            ) {
-                                composable<Route.PhotoList> {
-                                    PhotoListScreen(
-                                        viewModel = hiltViewModel(),
-                                        onPhotoClick = { photo ->
-                                            navController.navigate(Route.PhotoDetail(photo.id, photo.thumbnailUrl))
-                                        },
-                                        animatedVisibilityScope = this,
-                                        sharedTransitionScope = this@SharedTransitionLayout
-                                    )
-                                }
-                                composable<Route.PhotoDetail> {
-                                    PhotoDetailScreen(
-                                        viewModel = hiltViewModel(),
-                                        onBackClick = {
-                                            navController.popBackStack()
-                                        },
-                                        animatedVisibilityScope = this,
-                                        sharedTransitionScope = this@SharedTransitionLayout
-                                    )
-                                }
-                            }
+                
+                SharedTransitionLayout {
+                    NavHost(
+                        navController = navController,
+                        startDestination = Route.PhotoList,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        composable<Route.PhotoList> {
+                            PhotoListScreen(
+                                viewModel = hiltViewModel(),
+                                onPhotoClick = { photo ->
+                                    navController.navigate(Route.PhotoDetail(photo.id, photo.thumbnailUrl))
+                                },
+                                isDarkTheme = isDarkTheme,
+                                onThemeToggle = { isDarkTheme = !isDarkTheme },
+                                animatedVisibilityScope = this,
+                                sharedTransitionScope = this@SharedTransitionLayout
+                            )
+                        }
+                        composable<Route.PhotoDetail> {
+                            PhotoDetailScreen(
+                                viewModel = hiltViewModel(),
+                                onBackClick = {
+                                    navController.popBackStack()
+                                },
+                                animatedVisibilityScope = this,
+                                sharedTransitionScope = this@SharedTransitionLayout
+                            )
                         }
                     }
                 }
