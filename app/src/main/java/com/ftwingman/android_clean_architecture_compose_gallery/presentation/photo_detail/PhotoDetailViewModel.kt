@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.Photo
-import com.ftwingman.android_clean_architecture_compose_gallery.domain.repository.PhotoRepository
+import com.ftwingman.android_clean_architecture_compose_gallery.domain.usecase.GetPhotoDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -14,14 +14,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PhotoDetailViewModel @Inject constructor(
-    private val repository: PhotoRepository,
+    private val getPhotoDetail: GetPhotoDetailUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-
     private val photoId: String = checkNotNull(savedStateHandle["photoId"])
     val thumbnailUrl: String = checkNotNull(savedStateHandle["thumbnailUrl"])
 
-    val photo: StateFlow<Photo?> = repository.getPhotoById(photoId)
+    val photo: StateFlow<Photo?> = getPhotoDetail(photoId)
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
@@ -31,7 +30,7 @@ class PhotoDetailViewModel @Inject constructor(
     init {
         // Trigger background refresh to get EXIF and other full details
         viewModelScope.launch {
-            repository.refreshPhotoDetail(photoId)
+            getPhotoDetail.refresh(photoId)
         }
     }
 }

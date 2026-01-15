@@ -3,7 +3,7 @@ package com.ftwingman.android_clean_architecture_compose_gallery.presentation.ph
 import androidx.lifecycle.SavedStateHandle
 import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.Photo
 import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.User
-import com.ftwingman.android_clean_architecture_compose_gallery.domain.repository.PhotoRepository
+import com.ftwingman.android_clean_architecture_compose_gallery.domain.usecase.GetPhotoDetailUseCase
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -23,7 +23,7 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class PhotoDetailViewModelTest {
 
-    private val repository = mockk<PhotoRepository>()
+    private val getPhotoDetail = mockk<GetPhotoDetailUseCase>()
     private val testDispatcher = StandardTestDispatcher()
     private val photoId = "test_id"
     private val thumbnailUrl = "thumb_url"
@@ -56,11 +56,11 @@ class PhotoDetailViewModelTest {
             unsplashUrl = "html",
             downloadUrl = "download"
         )
-        every { repository.getPhotoById(photoId) } returns flowOf(photo)
-        io.mockk.coEvery { repository.refreshPhotoDetail(any()) } returns Unit
+        every { getPhotoDetail(photoId) } returns flowOf(photo)
+        io.mockk.coEvery { getPhotoDetail.refresh(any()) } returns Unit
 
         // When
-        val viewModel = PhotoDetailViewModel(repository, savedStateHandle)
+        val viewModel = PhotoDetailViewModel(getPhotoDetail, savedStateHandle)
         
         // StateFlow needs to be collected to start emissions when using WhileSubscribed
         backgroundScope.launch {
@@ -70,7 +70,7 @@ class PhotoDetailViewModelTest {
         testDispatcher.scheduler.advanceUntilIdle()
 
         // Then
-        verify { repository.getPhotoById(photoId) }
+        verify { getPhotoDetail(photoId) }
         assertEquals(photo, viewModel.photo.value)
     }
 }
