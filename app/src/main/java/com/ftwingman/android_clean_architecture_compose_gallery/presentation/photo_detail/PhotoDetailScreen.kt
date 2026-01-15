@@ -1,5 +1,8 @@
 package com.ftwingman.android_clean_architecture_compose_gallery.presentation.photo_detail
 
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -30,6 +33,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
@@ -43,6 +47,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -114,6 +119,8 @@ fun SharedTransitionScope.PhotoDetailContent(
     animatedVisibilityScope: AnimatedVisibilityScope,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -219,7 +226,13 @@ fun SharedTransitionScope.PhotoDetailContent(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 OutlinedButton(
-                    onClick = { /* TODO */ },
+                    onClick = {
+                        photo.downloadUrl?.let { url ->
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                            context.startActivity(intent)
+                            Toast.makeText(context, "Opening download link...", Toast.LENGTH_SHORT).show()
+                        }
+                    },
                     modifier = Modifier.weight(1f),
                     contentPadding = PaddingValues(12.dp)
                 ) {
@@ -228,7 +241,12 @@ fun SharedTransitionScope.PhotoDetailContent(
                     Text("Download")
                 }
                 OutlinedButton(
-                    onClick = { /* TODO */ },
+                    onClick = {
+                        photo.unsplashUrl?.let { url ->
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                            context.startActivity(intent)
+                        }
+                    },
                     modifier = Modifier.weight(1f),
                     contentPadding = PaddingValues(12.dp)
                 ) {
