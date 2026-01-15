@@ -24,7 +24,9 @@ class PhotoEntityTest {
             exifExposureTime = null,
             exifAperture = null,
             exifFocalLength = null,
-            exifIso = null
+            exifIso = null,
+            unsplashUrl = "html",
+            downloadUrl = "download"
         )
 
         assertEquals("1", entity.id)

@@ -22,7 +22,9 @@ class PhotoModelTest {
             blurHash = "hash",
             description = "desc",
             author = user,
-            exif = null
+            exif = null,
+            unsplashUrl = "html",
+            downloadUrl = "download"
         )
 
         assertEquals("1", photo.id)

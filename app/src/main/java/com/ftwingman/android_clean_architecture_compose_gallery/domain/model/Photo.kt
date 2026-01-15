@@ -14,5 +14,7 @@ data class Photo(
     val blurHash: String?,
     val description: String?,
     val author: User,
-    val exif: ExifInfo?
+    val exif: ExifInfo?,
+    val unsplashUrl: String?,
+    val downloadUrl: String?
 )

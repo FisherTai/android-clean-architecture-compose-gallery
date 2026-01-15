@@ -9,7 +9,7 @@ import com.ftwingman.android_clean_architecture_compose_gallery.data.local.entit
 
 @Database(
     entities = [PhotoEntity::class, RemoteKeys::class],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 abstract class InfiniteMuseDatabase : RoomDatabase() {

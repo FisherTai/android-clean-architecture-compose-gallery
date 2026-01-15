@@ -12,6 +12,7 @@ import com.ftwingman.android_clean_architecture_compose_gallery.data.local.dao.P
 import com.ftwingman.android_clean_architecture_compose_gallery.data.local.dao.RemoteKeysDao
 import com.ftwingman.android_clean_architecture_compose_gallery.data.local.entity.PhotoEntity
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.PhotoDto
+import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.PhotoLinksDto
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.PhotoUrlsDto
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.ProfileImageDto
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.UserDto
@@ -64,7 +65,8 @@ class PhotoRemoteMediatorTest {
             blurHash = "hash",
             urls = PhotoUrlsDto("raw", "full", "reg", "small", "thumb"),
             user = UserDto("u1", "user", "name", ProfileImageDto("s", "m", "l")),
-            exif = null
+            exif = null,
+            links = PhotoLinksDto(html = "html", download = "download")
         )
         coEvery { apiService.getPhotos(any(), any()) } returns listOf(photoDto)
 

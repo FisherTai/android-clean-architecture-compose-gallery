@@ -14,7 +14,14 @@ data class PhotoDto(
     val blurHash: String?,
     val urls: PhotoUrlsDto,
     val user: UserDto,
-    val exif: ExifDto?
+    val exif: ExifDto?,
+    val links: PhotoLinksDto
+)
+
+@JsonClass(generateAdapter = true)
+data class PhotoLinksDto(
+    val html: String,
+    val download: String
 )
 
 @JsonClass(generateAdapter = true)

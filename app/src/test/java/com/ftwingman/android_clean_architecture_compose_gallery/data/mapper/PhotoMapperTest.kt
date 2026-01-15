@@ -3,6 +3,7 @@ package com.ftwingman.android_clean_architecture_compose_gallery.data.mapper
 import com.ftwingman.android_clean_architecture_compose_gallery.data.local.entity.PhotoEntity
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.ExifDto
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.PhotoDto
+import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.PhotoLinksDto
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.PhotoUrlsDto
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.ProfileImageDto
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.UserDto
@@ -35,7 +36,8 @@ class PhotoMapperTest {
                 aperture = "f/2.8",
                 focalLength = "50mm",
                 iso = 100
-            )
+            ),
+            links = PhotoLinksDto(html = "html", download = "download")
         )
 
         val domain = dto.toDomain()
@@ -56,6 +58,9 @@ class PhotoMapperTest {
         assertNotNull(domain.exif)
         assertEquals("Canon", domain.exif?.make)
         assertEquals(100, domain.exif?.iso)
+        
+        assertEquals("html", domain.unsplashUrl)
+        assertEquals("download", domain.downloadUrl)
     }
 
     @Test
@@ -81,7 +86,8 @@ class PhotoMapperTest {
                 aperture = "f/2.8",
                 focalLength = "50mm",
                 iso = 100
-            )
+            ),
+            links = PhotoLinksDto(html = "html", download = "download")
         )
 
         val entity = dto.toEntity()
@@ -100,6 +106,9 @@ class PhotoMapperTest {
         
         assertEquals("Canon", entity.exifMake)
         assertEquals(100, entity.exifIso)
+        
+        assertEquals("html", entity.unsplashUrl)
+        assertEquals("download", entity.downloadUrl)
     }
 
     @Test
@@ -121,7 +130,9 @@ class PhotoMapperTest {
             exifExposureTime = "1/100",
             exifAperture = "f/2.8",
             exifFocalLength = "50mm",
-            exifIso = 100
+            exifIso = 100,
+            unsplashUrl = "html",
+            downloadUrl = "download"
         )
 
         val domain = entity.toDomain()
@@ -141,5 +152,8 @@ class PhotoMapperTest {
         assertNotNull(domain.exif)
         assertEquals("Canon", domain.exif?.make)
         assertEquals(100, domain.exif?.iso)
+        
+        assertEquals("html", domain.unsplashUrl)
+        assertEquals("download", domain.downloadUrl)
     }
 }

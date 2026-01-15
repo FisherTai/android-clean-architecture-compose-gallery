@@ -121,7 +121,9 @@ fun PhotoItemPreview() {
                     name = "John Doe",
                     profileImage = "https://pic.616pic.com/ys_bnew_img/00/20/31/PfCAgYoVAA.jpg"
                 ),
-                exif = null
+                exif = null,
+                unsplashUrl = null,
+                downloadUrl = null
             ),
             onPhotoClick = {},
             modifier = Modifier.width(200.dp)

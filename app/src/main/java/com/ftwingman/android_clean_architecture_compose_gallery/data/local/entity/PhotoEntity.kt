@@ -26,5 +26,8 @@ data class PhotoEntity(
     @ColumnInfo(name = "exif_exposure_time") val exifExposureTime: String?,
     @ColumnInfo(name = "exif_aperture") val exifAperture: String?,
     @ColumnInfo(name = "exif_focal_length") val exifFocalLength: String?,
-    @ColumnInfo(name = "exif_iso") val exifIso: Int?
+    @ColumnInfo(name = "exif_iso") val exifIso: Int?,
+    
+    @ColumnInfo(name = "unsplash_url") val unsplashUrl: String?,
+    @ColumnInfo(name = "download_url") val downloadUrl: String?
 )

@@ -31,7 +31,9 @@ fun PhotoDto.toDomain(): Photo {
                 focalLength = it.focalLength,
                 iso = it.iso
             )
-        }
+        },
+        unsplashUrl = links.html,
+        downloadUrl = links.download
     )
 }
 
@@ -53,7 +55,9 @@ fun PhotoDto.toEntity(): PhotoEntity {
         exifExposureTime = exif?.exposureTime,
         exifAperture = exif?.aperture,
         exifFocalLength = exif?.focalLength,
-        exifIso = exif?.iso
+        exifIso = exif?.iso,
+        unsplashUrl = links.html,
+        downloadUrl = links.download
     )
 }
 
@@ -80,6 +84,8 @@ fun PhotoEntity.toDomain(): Photo {
             aperture = exifAperture,
             focalLength = exifFocalLength,
             iso = exifIso
-        )
+        ),
+        unsplashUrl = unsplashUrl,
+        downloadUrl = downloadUrl
     )
 }

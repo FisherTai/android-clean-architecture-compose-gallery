@@ -52,7 +52,9 @@ class PhotoDetailViewModelTest {
             blurHash = null,
             description = "desc",
             author = User("u1", "user", "name", "profile"),
-            exif = null
+            exif = null,
+            unsplashUrl = "html",
+            downloadUrl = "download"
         )
         every { repository.getPhotoById(photoId) } returns flowOf(photo)
 

@@ -7,6 +7,7 @@ import com.ftwingman.android_clean_architecture_compose_gallery.data.local.dao.P
 import com.ftwingman.android_clean_architecture_compose_gallery.data.local.entity.PhotoEntity
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.UnsplashApiService
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.PhotoDto
+import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.PhotoLinksDto
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.PhotoUrlsDto
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.ProfileImageDto
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.UserDto
@@ -84,7 +85,9 @@ class PhotoRepositoryImplTest {
             exifExposureTime = null,
             exifAperture = null,
             exifFocalLength = null,
-            exifIso = null
+            exifIso = null,
+            unsplashUrl = "html",
+            downloadUrl = "download"
         )
         coEvery { database.photoDao().getPhotoById(any<String>()) } returns entity
 
@@ -94,37 +97,37 @@ class PhotoRepositoryImplTest {
         val result = repository.getPhotoById(id).first()
 
         // Then
-                assertNotNull(result)
-                assertEquals(id, result?.id)
-                assertEquals("desc", result?.description)
-            }
-        
-            @Test
-            fun `refreshPhotoDetail should fetch from API and update DB`() = runBlocking {
-                // Given
-                val id = "1"
-                val dto = PhotoDto(
-                    id = id,
-                    width = 100,
-                    height = 100,
-                    color = "#000000",
-                    description = "desc",
-                    blurHash = null,
-                    urls = PhotoUrlsDto("raw", "full", "reg", "small", "thumb"),
-                    user = UserDto("u1", "user", "name", ProfileImageDto("s", "m", "l")),
-                    exif = null
-                )
-                coEvery { apiService.getPhotoDetail(id) } returns dto
-                coEvery { database.photoDao().insertAll(any()) } returns Unit
-        
-                repository = PhotoRepositoryImpl(apiService, database)
-        
-                // When
-                repository.refreshPhotoDetail(id)
-        
-                // Then
-                io.mockk.coVerify { apiService.getPhotoDetail(id) }
-                io.mockk.coVerify { database.photoDao().insertAll(any()) }
-            }
-        }
-        
+        assertNotNull(result)
+        assertEquals(id, result?.id)
+        assertEquals("desc", result?.description)
+    }
+
+    @Test
+    fun `refreshPhotoDetail should fetch from API and update DB`() = runBlocking {
+        // Given
+        val id = "1"
+        val dto = PhotoDto(
+            id = id,
+            width = 100,
+            height = 100,
+            color = "#000000",
+            description = "desc",
+            blurHash = null,
+            urls = PhotoUrlsDto("raw", "full", "reg", "small", "thumb"),
+            user = UserDto("u1", "user", "name", ProfileImageDto("s", "m", "l")),
+            exif = null,
+            links = PhotoLinksDto(html = "html", download = "download")
+        )
+        coEvery { apiService.getPhotoDetail(id) } returns dto
+        coEvery { database.photoDao().insertAll(any()) } returns Unit
+
+        repository = PhotoRepositoryImpl(apiService, database)
+
+        // When
+        repository.refreshPhotoDetail(id)
+
+        // Then
+        io.mockk.coVerify { apiService.getPhotoDetail(id) }
+        io.mockk.coVerify { database.photoDao().insertAll(any()) }
+    }
+}
