@@ -49,7 +49,9 @@ class PhotoRepositoryImpl @Inject constructor(
 
     override suspend fun refreshPhotoDetail(id: String) {
         try {
+            Timber.d("Refreshing photo detail for id: $id")
             val dto = apiService.getPhotoDetail(id)
+            Timber.d("Fetched detail for $id. EXIF: ${dto.exif}")
             val entity = dto.toEntity()
             // We use insertAll (OnConflictStrategy.REPLACE) to update the existing record
             database.photoDao().insertAll(listOf(entity))

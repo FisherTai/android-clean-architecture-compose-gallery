@@ -1,7 +1,10 @@
 package com.ftwingman.android_clean_architecture_compose_gallery.presentation.photo_detail
 
+import android.app.DownloadManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Environment
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -43,7 +46,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -185,7 +187,7 @@ fun SharedTransitionScope.PhotoDetailContent(
             }
 
             Spacer(modifier = Modifier.height(24.dp))
-            HorizontalDivider(modifier = Modifier.alpha(0.1f))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.1f))
             Spacer(modifier = Modifier.height(24.dp))
 
             // EXIF Info
@@ -228,9 +230,21 @@ fun SharedTransitionScope.PhotoDetailContent(
                 OutlinedButton(
                     onClick = {
                         photo.downloadUrl?.let { url ->
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                            context.startActivity(intent)
-                            Toast.makeText(context, "Opening download link...", Toast.LENGTH_SHORT).show()
+                            try {
+                                val request = DownloadManager.Request(Uri.parse(url))
+                                    .setTitle("Unsplash Photo ${photo.id}")
+                                    .setDescription("Downloading photo by ${photo.author.name}")
+                                    .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                                    .setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, "Unsplash_${photo.id}.jpg")
+                                    .setAllowedOverMetered(true)
+                                    .setAllowedOverRoaming(true)
+
+                                val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+                                downloadManager.enqueue(request)
+                                Toast.makeText(context, "Downloading...", Toast.LENGTH_SHORT).show()
+                            } catch (e: Exception) {
+                                Toast.makeText(context, "Download failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                            }
                         }
                     },
                     modifier = Modifier.weight(1f),
