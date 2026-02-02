@@ -13,5 +13,6 @@ data class Photo(
     val color: String?,
     val blurHash: String?,
     val description: String?,
-    val author: User
+    val author: User,
+    val exif: ExifInfo?
 )

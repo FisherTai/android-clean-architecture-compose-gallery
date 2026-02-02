@@ -74,7 +74,13 @@ class PhotoRepositoryImplTest {
             description = "desc",
             authorName = "author",
             authorUsername = "user",
-            authorProfileImage = "profile"
+            authorProfileImage = "profile",
+            exifMake = null,
+            exifModel = null,
+            exifExposureTime = null,
+            exifAperture = null,
+            exifFocalLength = null,
+            exifIso = null
         )
         coEvery { database.photoDao().getPhotoById(any<String>()) } returns entity
 

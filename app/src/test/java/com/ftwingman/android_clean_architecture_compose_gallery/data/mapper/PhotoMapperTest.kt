@@ -1,11 +1,13 @@
 package com.ftwingman.android_clean_architecture_compose_gallery.data.mapper
 
 import com.ftwingman.android_clean_architecture_compose_gallery.data.local.entity.PhotoEntity
+import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.ExifDto
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.PhotoDto
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.PhotoUrlsDto
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.ProfileImageDto
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.UserDto
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Test
 
 class PhotoMapperTest {
@@ -25,6 +27,14 @@ class PhotoMapperTest {
                 username = "username",
                 name = "name",
                 profileImage = ProfileImageDto(small = "", medium = "profile", large = "")
+            ),
+            exif = ExifDto(
+                make = "Canon",
+                model = "EOS",
+                exposureTime = "1/100",
+                aperture = "f/2.8",
+                focalLength = "50mm",
+                iso = 100
             )
         )
 
@@ -42,6 +52,10 @@ class PhotoMapperTest {
         assertEquals("username", domain.author.username)
         assertEquals("name", domain.author.name)
         assertEquals("profile", domain.author.profileImage)
+        
+        assertNotNull(domain.exif)
+        assertEquals("Canon", domain.exif?.make)
+        assertEquals(100, domain.exif?.iso)
     }
 
     @Test
@@ -59,6 +73,14 @@ class PhotoMapperTest {
                 username = "username",
                 name = "name",
                 profileImage = ProfileImageDto(small = "", medium = "profile", large = "")
+            ),
+            exif = ExifDto(
+                make = "Canon",
+                model = "EOS",
+                exposureTime = "1/100",
+                aperture = "f/2.8",
+                focalLength = "50mm",
+                iso = 100
             )
         )
 
@@ -75,6 +97,9 @@ class PhotoMapperTest {
         assertEquals("name", entity.authorName)
         assertEquals("username", entity.authorUsername)
         assertEquals("profile", entity.authorProfileImage)
+        
+        assertEquals("Canon", entity.exifMake)
+        assertEquals(100, entity.exifIso)
     }
 
     @Test
@@ -90,7 +115,13 @@ class PhotoMapperTest {
             description = "desc",
             authorName = "name",
             authorUsername = "username",
-            authorProfileImage = "profile"
+            authorProfileImage = "profile",
+            exifMake = "Canon",
+            exifModel = "EOS",
+            exifExposureTime = "1/100",
+            exifAperture = "f/2.8",
+            exifFocalLength = "50mm",
+            exifIso = 100
         )
 
         val domain = entity.toDomain()
@@ -106,5 +137,9 @@ class PhotoMapperTest {
         assertEquals("username", domain.author.username)
         assertEquals("name", domain.author.name)
         assertEquals("profile", domain.author.profileImage)
+        
+        assertNotNull(domain.exif)
+        assertEquals("Canon", domain.exif?.make)
+        assertEquals(100, domain.exif?.iso)
     }
 }

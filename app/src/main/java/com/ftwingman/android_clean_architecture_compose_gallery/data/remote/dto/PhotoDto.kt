@@ -13,7 +13,8 @@ data class PhotoDto(
     @Json(name = "blur_hash")
     val blurHash: String?,
     val urls: PhotoUrlsDto,
-    val user: UserDto
+    val user: UserDto,
+    val exif: ExifDto?
 )
 
 @JsonClass(generateAdapter = true)

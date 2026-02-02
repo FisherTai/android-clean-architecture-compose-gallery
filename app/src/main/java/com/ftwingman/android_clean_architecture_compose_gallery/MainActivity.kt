@@ -136,6 +136,7 @@ fun PhotoItemPreview() {
                 height = 100,
                 url = "https://pic.616pic.com/ys_bnew_img/00/20/31/PfCAgYoVAA.jpg",
                 thumbnailUrl = "https://pic.616pic.com/ys_bnew_img/00/20/31/PfCAgYoVAA.jpg",
+                color = "#E0E0E0",
                 blurHash = null,
                 description = "A beautiful sunset",
                 author = User(
@@ -143,7 +144,8 @@ fun PhotoItemPreview() {
                     username = "johndoe",
                     name = "John Doe",
                     profileImage = "https://pic.616pic.com/ys_bnew_img/00/20/31/PfCAgYoVAA.jpg"
-                )
+                ),
+                exif = null
             ),
             onPhotoClick = {},
             modifier = Modifier.width(200.dp)

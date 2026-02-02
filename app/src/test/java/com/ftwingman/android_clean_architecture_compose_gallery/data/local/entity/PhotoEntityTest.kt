@@ -18,7 +18,13 @@ class PhotoEntityTest {
             description = "desc",
             authorName = "author",
             authorUsername = "username",
-            authorProfileImage = "profile"
+            authorProfileImage = "profile",
+            exifMake = null,
+            exifModel = null,
+            exifExposureTime = null,
+            exifAperture = null,
+            exifFocalLength = null,
+            exifIso = null
         )
 
         assertEquals("1", entity.id)

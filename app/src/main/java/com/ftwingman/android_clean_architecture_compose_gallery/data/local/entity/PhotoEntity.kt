@@ -18,5 +18,13 @@ data class PhotoEntity(
     val description: String?,
     val authorName: String,
     val authorUsername: String,
-    val authorProfileImage: String
+    val authorProfileImage: String,
+    
+    // EXIF Data
+    @ColumnInfo(name = "exif_make") val exifMake: String?,
+    @ColumnInfo(name = "exif_model") val exifModel: String?,
+    @ColumnInfo(name = "exif_exposure_time") val exifExposureTime: String?,
+    @ColumnInfo(name = "exif_aperture") val exifAperture: String?,
+    @ColumnInfo(name = "exif_focal_length") val exifFocalLength: String?,
+    @ColumnInfo(name = "exif_iso") val exifIso: Int?
 )

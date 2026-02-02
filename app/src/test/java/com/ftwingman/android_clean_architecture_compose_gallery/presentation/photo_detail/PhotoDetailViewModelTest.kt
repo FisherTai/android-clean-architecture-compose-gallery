@@ -51,7 +51,8 @@ class PhotoDetailViewModelTest {
             color = "#000000",
             blurHash = null,
             description = "desc",
-            author = User("u1", "user", "name", "profile")
+            author = User("u1", "user", "name", "profile"),
+            exif = null
         )
         every { repository.getPhotoById(photoId) } returns flowOf(photo)
 

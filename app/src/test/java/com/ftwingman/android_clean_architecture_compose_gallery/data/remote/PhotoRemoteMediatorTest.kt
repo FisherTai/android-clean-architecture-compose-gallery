@@ -63,7 +63,8 @@ class PhotoRemoteMediatorTest {
             description = "desc",
             blurHash = "hash",
             urls = PhotoUrlsDto("raw", "full", "reg", "small", "thumb"),
-            user = UserDto("u1", "user", "name", ProfileImageDto("s", "m", "l"))
+            user = UserDto("u1", "user", "name", ProfileImageDto("s", "m", "l")),
+            exif = null
         )
         coEvery { apiService.getPhotos(any(), any()) } returns listOf(photoDto)
 

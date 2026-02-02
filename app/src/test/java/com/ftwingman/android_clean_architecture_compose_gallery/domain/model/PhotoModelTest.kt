@@ -21,7 +21,8 @@ class PhotoModelTest {
             color = "#000000",
             blurHash = "hash",
             description = "desc",
-            author = user
+            author = user,
+            exif = null
         )
 
         assertEquals("1", photo.id)
