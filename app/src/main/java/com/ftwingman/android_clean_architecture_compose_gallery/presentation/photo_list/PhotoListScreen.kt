@@ -26,6 +26,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -85,7 +87,7 @@ fun PhotoListScreen(
     }
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
+@OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun SharedTransitionScope.PhotoListContent(
     photos: LazyPagingItems<Photo>,
@@ -94,7 +96,15 @@ fun SharedTransitionScope.PhotoListContent(
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
-    Box(modifier = modifier.fillMaxSize().padding(top = contentPadding.calculateTopPadding())) {
+    val pullRefreshState = rememberPullToRefreshState()
+    val isRefreshing = photos.loadState.refresh is LoadState.Loading && photos.itemCount > 0
+
+    PullToRefreshBox(
+        isRefreshing = isRefreshing,
+        onRefresh = { photos.refresh() },
+        state = pullRefreshState,
+        modifier = modifier.fillMaxSize().padding(top = contentPadding.calculateTopPadding())
+    ) {
         LazyVerticalStaggeredGrid(
             columns = StaggeredGridCells.Adaptive(150.dp),
             modifier = Modifier.fillMaxSize(),
@@ -137,19 +147,18 @@ fun SharedTransitionScope.PhotoListContent(
             }
         }
 
-        // Handle Refresh (Initial Load) states
-        when (val state = photos.loadState.refresh) {
-            is LoadState.Loading -> {
-                LoadingIndicator(modifier = Modifier.align(Alignment.Center))
-            }
-            is LoadState.Error -> {
-                ErrorRetryIndicator(
-                    message = state.error.localizedMessage ?: "Unknown Error",
-                    onRetry = { photos.retry() },
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
-            else -> {}
+        // Handle Refresh (Initial Load) states - only if empty
+        if (photos.loadState.refresh is LoadState.Loading && photos.itemCount == 0) {
+            LoadingIndicator(modifier = Modifier.align(Alignment.Center))
+        }
+        
+        if (photos.loadState.refresh is LoadState.Error) {
+            val state = photos.loadState.refresh as LoadState.Error
+            ErrorRetryIndicator(
+                message = state.error.localizedMessage ?: "Unknown Error",
+                onRetry = { photos.retry() },
+                modifier = Modifier.align(Alignment.Center)
+            )
         }
     }
 }
