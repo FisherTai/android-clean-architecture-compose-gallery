@@ -22,6 +22,7 @@ import androidx.navigation.toRoute
 import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.Photo
 import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.User
 import com.ftwingman.android_clean_architecture_compose_gallery.presentation.navigation.Route
+import com.ftwingman.android_clean_architecture_compose_gallery.presentation.photo_detail.PhotoDetailScreen
 import com.ftwingman.android_clean_architecture_compose_gallery.presentation.photo_list.PhotoListScreen
 import com.ftwingman.android_clean_architecture_compose_gallery.presentation.photo_list.components.PhotoItem
 import com.ftwingman.android_clean_architecture_compose_gallery.ui.theme.AndroidcleanarchitecturecomposegalleryTheme
@@ -49,12 +50,13 @@ class MainActivity : ComponentActivity() {
                                     }
                                 )
                             }
-                            composable<Route.PhotoDetail> { backStackEntry ->
-                                val detail: Route.PhotoDetail = backStackEntry.toRoute()
-                                // Temporary stub for Detail Screen
-                                Box(modifier = Modifier.fillMaxSize(), contentAlignment = androidx.compose.ui.Alignment.Center) {
-                                    Text(text = "Photo Detail: ${detail.photoId}")
-                                }
+                            composable<Route.PhotoDetail> {
+                                PhotoDetailScreen(
+                                    viewModel = hiltViewModel(),
+                                    onBackClick = {
+                                        navController.popBackStack()
+                                    }
+                                )
                             }
                         }
                     }
