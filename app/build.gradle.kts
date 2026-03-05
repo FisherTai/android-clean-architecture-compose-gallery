@@ -31,6 +31,9 @@ android {
         
         val unsplashKey = localProperties.getProperty("UNSPLASH_ACCESS_KEY") ?: ""
         buildConfigField("String", "UNSPLASH_ACCESS_KEY", "\"$unsplashKey\"")
+
+        val pexelsKey = localProperties.getProperty("PEXELS_ACCESS_KEY") ?: ""
+        buildConfigField("String", "PEXELS_ACCESS_KEY", "\"$pexelsKey\"")
     }
 
     buildTypes {
@@ -92,6 +95,13 @@ dependencies {
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)
     implementation(libs.coil.compose)
+
+    // Media3 (ExoPlayer)
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.ui)
+    implementation(libs.androidx.media3.datasource)
+    implementation(libs.androidx.media3.database)
+    implementation(libs.androidx.media3.common)
 
     testImplementation(libs.junit)
     testImplementation(libs.okhttp.mockwebserver)

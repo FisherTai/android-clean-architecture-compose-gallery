@@ -3,6 +3,8 @@ package com.ftwingman.android_clean_architecture_compose_gallery.di
 import android.content.Context
 import androidx.room.Room
 import com.ftwingman.android_clean_architecture_compose_gallery.data.local.InfiniteMuseDatabase
+import com.ftwingman.android_clean_architecture_compose_gallery.data.local.dao.MediaItemDao
+import com.ftwingman.android_clean_architecture_compose_gallery.data.local.dao.MediaRemoteKeysDao
 import com.ftwingman.android_clean_architecture_compose_gallery.data.local.dao.PhotoDao
 import com.ftwingman.android_clean_architecture_compose_gallery.data.local.dao.RemoteKeysDao
 import dagger.Module
@@ -36,5 +38,15 @@ object DatabaseModule {
     @Provides
     fun provideRemoteKeysDao(database: InfiniteMuseDatabase): RemoteKeysDao {
         return database.remoteKeysDao()
+    }
+
+    @Provides
+    fun provideMediaItemDao(database: InfiniteMuseDatabase): MediaItemDao {
+        return database.mediaItemDao()
+    }
+
+    @Provides
+    fun provideMediaRemoteKeysDao(database: InfiniteMuseDatabase): MediaRemoteKeysDao {
+        return database.mediaRemoteKeysDao()
     }
 }

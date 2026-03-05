@@ -37,6 +37,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.Photo
 import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.User
+import com.ftwingman.android_clean_architecture_compose_gallery.presentation.media_detail.MediaDetailScreen
+import com.ftwingman.android_clean_architecture_compose_gallery.presentation.media_list.MediaListScreen
+import com.ftwingman.android_clean_architecture_compose_gallery.presentation.menu.MenuScreen
 import com.ftwingman.android_clean_architecture_compose_gallery.presentation.navigation.Route
 import com.ftwingman.android_clean_architecture_compose_gallery.presentation.photo_detail.PhotoDetailScreen
 import com.ftwingman.android_clean_architecture_compose_gallery.presentation.photo_list.PhotoListScreen
@@ -60,9 +63,22 @@ class MainActivity : ComponentActivity() {
                 SharedTransitionLayout {
                     NavHost(
                         navController = navController,
-                        startDestination = Route.PhotoList,
+                        startDestination = Route.Menu,
                         modifier = Modifier.fillMaxSize()
                     ) {
+                        composable<Route.Menu> {
+                            MenuScreen(
+                                onNavigateToPhotoList = {
+                                    navController.navigate(Route.PhotoList)
+                                },
+                                onNavigateToVideoList = {
+                                    navController.navigate(Route.MediaList(mode = "VIDEO"))
+                                },
+                                onNavigateToMixedList = {
+                                    navController.navigate(Route.MediaList(mode = "MIXED"))
+                                }
+                            )
+                        }
                         composable<Route.PhotoList> {
                             PhotoListScreen(
                                 viewModel = hiltViewModel(),
@@ -83,6 +99,23 @@ class MainActivity : ComponentActivity() {
                                 },
                                 animatedVisibilityScope = this,
                                 sharedTransitionScope = this@SharedTransitionLayout
+                            )
+                        }
+                        composable<Route.MediaList> {
+                            MediaListScreen(
+                                viewModel = hiltViewModel(),
+                                onBackClick = { navController.popBackStack() },
+                                onMediaClick = { media ->
+                                    navController.navigate(
+                                        Route.MediaDetail(media.id, media.thumbnailUrl)
+                                    )
+                                }
+                            )
+                        }
+                        composable<Route.MediaDetail> {
+                            MediaDetailScreen(
+                                viewModel = hiltViewModel(),
+                                onBackClick = { navController.popBackStack() }
                             )
                         }
                     }
