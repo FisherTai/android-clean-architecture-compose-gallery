@@ -6,19 +6,16 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material3.ElevatedCard
+import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -42,10 +39,9 @@ import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.Med
 /**
  * 影片預覽卡片元件。
  *
- * - 靜止狀態：顯示影片首圖（thumbnailUrl）+ 播放圖示
+ * 使用 [MediaCardWrapper] 共用外殼，提供與圖片卡片一致的視覺與互動體驗。
+ * - 靜止狀態：顯示影片首圖（thumbnailUrl）+ 右上角影片角標
  * - 播放中：顯示 ExoPlayer PlayerView（由外部傳入的 player 實例控制）
- *
- * @param player 非 null 時表示此卡片為當前播放中項目，掛載 ExoPlayer PlayerView
  */
 @Composable
 fun VideoPreviewItem(
@@ -61,27 +57,26 @@ fun VideoPreviewItem(
         9f / 16f
     }
 
-    ElevatedCard(
+    val backgroundColor = parseAvgColor(mediaItem.avgColor)
+
+    MediaCardWrapper(
+        mediaItem = mediaItem,
+        onItemClick = onItemClick,
         modifier = modifier
-            .fillMaxWidth()
-            .padding(4.dp),
-        shape = MaterialTheme.shapes.medium
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(aspectRatio)
-                .clickable { onItemClick() }
+                .background(backgroundColor)
         ) {
             if (isPlaying && player != null) {
-                // 播放中：渲染 PlayerView，帶縮圖過渡避免黑畫面
                 VideoPlayerView(
                     player = player,
                     modifier = Modifier.fillMaxSize(),
                     thumbnailUrl = mediaItem.thumbnailUrl
                 )
             } else {
-                // 靜止：顯示縮圖 + 播放按鈕
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(mediaItem.thumbnailUrl)
@@ -91,23 +86,25 @@ fun VideoPreviewItem(
                     modifier = Modifier.fillMaxWidth(),
                     contentScale = ContentScale.FillWidth
                 )
+            }
 
-                // 播放圖示
+            // 影片角標（右上角小圖示）
+            if (!isPlaying) {
                 Box(
                     modifier = Modifier
-                        .align(Alignment.Center)
-                        .size(48.dp)
+                        .align(Alignment.TopEnd)
+                        .padding(6.dp)
                         .background(
                             color = Color.Black.copy(alpha = 0.5f),
-                            shape = CircleShape
-                        ),
-                    contentAlignment = Alignment.Center
+                            shape = RoundedCornerShape(4.dp)
+                        )
+                        .padding(horizontal = 4.dp, vertical = 2.dp)
                 ) {
                     Icon(
-                        imageVector = Icons.Default.PlayArrow,
-                        contentDescription = "播放影片",
+                        imageVector = Icons.Default.Videocam,
+                        contentDescription = "影片",
                         tint = Color.White,
-                        modifier = Modifier.size(32.dp)
+                        modifier = Modifier.size(14.dp)
                     )
                 }
             }

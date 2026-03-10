@@ -1,21 +1,21 @@
 package com.ftwingman.android_clean_architecture_compose_gallery.presentation.photo_list.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.MediaItem
+import com.ftwingman.android_clean_architecture_compose_gallery.presentation.media_list.components.MediaCardWrapper
+import com.ftwingman.android_clean_architecture_compose_gallery.presentation.media_list.components.parseAvgColor
 
 /**
- * Pexels 圖片項目的精簡縮圖卡片（不含 Shared Transition）。
+ * Pexels 圖片項目卡片。
+ * 使用 [MediaCardWrapper] 共用外殼，與影片卡片擁有一致的視覺與互動體驗。
  */
 @Composable
 fun MediaThumbnailItem(
@@ -27,12 +27,12 @@ fun MediaThumbnailItem(
         mediaItem.width.toFloat() / mediaItem.height.toFloat()
     } else 1f
 
-    ElevatedCard(
-        onClick = onItemClick,
+    val backgroundColor = parseAvgColor(mediaItem.avgColor)
+
+    MediaCardWrapper(
+        mediaItem = mediaItem,
+        onItemClick = onItemClick,
         modifier = modifier
-            .fillMaxWidth()
-            .padding(4.dp),
-        shape = MaterialTheme.shapes.medium
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
@@ -42,7 +42,8 @@ fun MediaThumbnailItem(
             contentDescription = mediaItem.description,
             modifier = Modifier
                 .fillMaxWidth()
-                .aspectRatio(aspectRatio),
+                .aspectRatio(aspectRatio)
+                .background(backgroundColor),
             contentScale = ContentScale.FillWidth
         )
     }
