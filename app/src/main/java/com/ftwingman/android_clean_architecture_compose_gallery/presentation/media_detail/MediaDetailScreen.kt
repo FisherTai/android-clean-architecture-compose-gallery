@@ -24,8 +24,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,6 +48,26 @@ fun MediaDetailScreen(
 ) {
     val mediaItem by viewModel.mediaItem.collectAsState()
     val isLoaded by viewModel.isLoaded.collectAsState()
+
+    // 生命週期連動：App 退到背景時暫停播放，回到前景時恢復
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner, viewModel) {
+        var wasPlaying = false
+        val observer = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_STOP -> {
+                    wasPlaying = viewModel.player.playWhenReady
+                    viewModel.player.pause()
+                }
+                Lifecycle.Event.ON_START -> {
+                    if (wasPlaying) viewModel.player.play()
+                }
+                else -> {}
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
 
     Surface(
         modifier = modifier.fillMaxSize(),
@@ -128,6 +152,7 @@ private fun MediaDetailContent(
             MediaType.VIDEO -> {
                 DetailPlayerView(
                     player = player,
+                    thumbnailUrl = thumbnailUrl,
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(aspectRatio)
@@ -185,16 +210,18 @@ private fun MediaDetailContent(
 
 /**
  * 詳情頁 PlayerView，啟用播放控制列。
- * 複用 VideoPlayerView 共用元件。
+ * 複用 VideoPlayerView 共用元件，帶縮圖過渡避免黑畫面。
  */
 @Composable
 private fun DetailPlayerView(
     player: androidx.media3.exoplayer.ExoPlayer,
+    thumbnailUrl: String,
     modifier: Modifier = Modifier
 ) {
     com.ftwingman.android_clean_architecture_compose_gallery.presentation.media_list.components.VideoPlayerView(
         player = player,
         modifier = modifier,
-        useController = true
+        useController = true,
+        thumbnailUrl = thumbnailUrl
     )
 }

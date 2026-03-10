@@ -2,6 +2,9 @@
 
 package com.ftwingman.android_clean_architecture_compose_gallery.presentation.media_list.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -17,6 +20,11 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,6 +32,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import coil.compose.AsyncImage
@@ -65,10 +74,11 @@ fun VideoPreviewItem(
                 .clickable { onItemClick() }
         ) {
             if (isPlaying && player != null) {
-                // 播放中：渲染 PlayerView
+                // 播放中：渲染 PlayerView，帶縮圖過渡避免黑畫面
                 VideoPlayerView(
                     player = player,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    thumbnailUrl = mediaItem.thumbnailUrl
                 )
             } else {
                 // 靜止：顯示縮圖 + 播放按鈕
@@ -107,25 +117,66 @@ fun VideoPreviewItem(
 
 /**
  * 包裝 Media3 PlayerView 的 AndroidView 橋接元件。
- * 使用 AndroidView 的 update/onRelease 正確管理 PlayerView 生命週期，
- * 避免因 player 參考變更導致頻繁 dispose/recreate。
+ * 使用 AndroidView 的 update/onRelease 正確管理 PlayerView 生命週期。
+ *
+ * 當提供 [thumbnailUrl] 時，會在影片第一幀渲染完成前顯示縮圖覆蓋層，
+ * 渲染完成後以淡出動畫平滑過渡，避免黑畫面閃爍。
  *
  * @param useController 是否顯示播放控制列（列表預覽 false，詳情頁 true）
+ * @param thumbnailUrl 過渡用縮圖 URL，null 則不顯示縮圖覆蓋層
  */
 @Composable
 fun VideoPlayerView(
     player: ExoPlayer,
     modifier: Modifier = Modifier,
-    useController: Boolean = false
+    useController: Boolean = false,
+    thumbnailUrl: String? = null
 ) {
-    AndroidView(
-        factory = { ctx ->
-            PlayerView(ctx).apply {
-                this.useController = useController
+    var hasRenderedFirstFrame by remember { mutableStateOf(false) }
+
+    // 監聽第一幀渲染與 media item 切換
+    DisposableEffect(player) {
+        hasRenderedFirstFrame = false
+        val listener = object : Player.Listener {
+            override fun onRenderedFirstFrame() {
+                hasRenderedFirstFrame = true
             }
-        },
-        update = { view -> view.player = player },
-        onRelease = { view -> view.player = null },
-        modifier = modifier
-    )
+
+            override fun onMediaItemTransition(
+                mediaItem: androidx.media3.common.MediaItem?,
+                reason: Int
+            ) {
+                hasRenderedFirstFrame = false
+            }
+        }
+        player.addListener(listener)
+        onDispose { player.removeListener(listener) }
+    }
+
+    Box(modifier = modifier) {
+        AndroidView(
+            factory = { ctx -> PlayerView(ctx) },
+            update = { view ->
+                view.player = player
+                view.useController = useController
+            },
+            onRelease = { view -> view.player = null },
+            modifier = Modifier.fillMaxSize()
+        )
+
+        // 縮圖覆蓋層：第一幀渲染前顯示，渲染後淡出
+        if (thumbnailUrl != null) {
+            AnimatedVisibility(
+                visible = !hasRenderedFirstFrame,
+                exit = fadeOut(animationSpec = tween(300))
+            ) {
+                AsyncImage(
+                    model = thumbnailUrl,
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.FillWidth
+                )
+            }
+        }
+    }
 }

@@ -80,7 +80,6 @@ class PexelsRemoteMediator(
 
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
-                    // 先刪 remote keys 再刪 media items，確保子查詢不會命中空集合
                     database.mediaRemoteKeysDao().clearByScope(scope)
                     database.mediaItemDao().clearByScope(scope)
                 }

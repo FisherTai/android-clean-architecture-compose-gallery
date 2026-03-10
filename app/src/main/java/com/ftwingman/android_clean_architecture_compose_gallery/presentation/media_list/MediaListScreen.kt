@@ -27,6 +27,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
@@ -56,9 +59,25 @@ fun MediaListScreen(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val gridState = rememberLazyStaggeredGridState()
 
-    // 離開列表頁時暫停播放器（例如導航到詳情頁）
-    DisposableEffect(viewModel) {
-        onDispose { viewModel.onCenterVideoChanged(null) }
+    // 生命週期連動：App 退到背景時暫停播放，回到前景時恢復
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner, viewModel) {
+        val observer = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_STOP -> viewModel.player.pause()
+                Lifecycle.Event.ON_START -> {
+                    if (viewModel.playingItemId.value != null) {
+                        viewModel.player.play()
+                    }
+                }
+                else -> {}
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            viewModel.onCenterVideoChanged(null)
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
     }
 
     // 滾動偵測：找出最靠近畫面中心的影片 Item（加 debounce 避免快速滑動時頻繁切換）
