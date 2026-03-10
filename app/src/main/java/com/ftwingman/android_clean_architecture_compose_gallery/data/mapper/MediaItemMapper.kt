@@ -8,7 +8,8 @@ import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.Med
 
 // ─── Pexels Photo DTO → Entity ───────────────────────────────────────────────
 
-fun PexelsPhotoDto.toEntity(): MediaItemEntity = MediaItemEntity(
+fun PexelsPhotoDto.toEntity(scope: String): MediaItemEntity = MediaItemEntity(
+    scope = scope,
     id = "photo_$id",
     width = width,
     height = height,
@@ -25,12 +26,13 @@ fun PexelsPhotoDto.toEntity(): MediaItemEntity = MediaItemEntity(
 
 // ─── Pexels Video DTO → Entity ───────────────────────────────────────────────
 
-fun PexelsVideoDto.toEntity(): MediaItemEntity {
+fun PexelsVideoDto.toEntity(scope: String): MediaItemEntity {
     // 優先選 sd 品質的影片檔，若無則取第一個
     val videoFile = videoFiles.firstOrNull { it.quality == "sd" }
         ?: videoFiles.firstOrNull()
 
     return MediaItemEntity(
+        scope = scope,
         id = "video_$id",
         width = width,
         height = height,

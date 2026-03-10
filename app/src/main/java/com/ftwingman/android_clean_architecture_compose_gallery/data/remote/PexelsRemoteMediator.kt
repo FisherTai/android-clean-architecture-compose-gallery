@@ -15,10 +15,12 @@ import timber.log.Timber
 /**
  * Pexels 媒體列表的 RemoteMediator。
  * @param mediaType 指定載入圖片、影片或混合（null）。
+ * @param scope 快取隔離維度（"IMAGE"、"VIDEO"、"MIXED"），確保不同列表模式的分頁狀態互不干擾。
  */
 @OptIn(ExperimentalPagingApi::class)
 class PexelsRemoteMediator(
     private val mediaType: MediaType?,
+    private val scope: String,
     private val apiService: PexelsApiService,
     private val database: InfiniteMuseDatabase
 ) : RemoteMediator<Int, MediaItemEntity>() {
@@ -44,16 +46,16 @@ class PexelsRemoteMediator(
                 }
             }
 
-            Timber.d("PexelsRemoteMediator: 載入第 $page 頁（類型: $mediaType, LoadType: $loadType）")
+            Timber.d("PexelsRemoteMediator: 載入第 $page 頁（scope: $scope, LoadType: $loadType）")
 
             val entities = when (mediaType) {
                 MediaType.IMAGE -> {
                     val response = apiService.getCuratedPhotos(page, state.config.pageSize)
-                    response.photos.map { it.toEntity() }
+                    response.photos.map { it.toEntity(scope) }
                 }
                 MediaType.VIDEO -> {
                     val response = apiService.getPopularVideos(page, state.config.pageSize)
-                    response.videos.map { it.toEntity() }
+                    response.videos.map { it.toEntity(scope) }
                 }
                 null -> {
                     // 混合模式：同時取圖片與影片，交錯合併
@@ -61,8 +63,8 @@ class PexelsRemoteMediator(
                     //  若其中一個 API 較早到達末頁，另一個仍有資料時可能導致單邊重複載入。
                     //  後續應改為獨立分頁追蹤（imageNextPage / videoNextPage）。
                     val perType = state.config.pageSize / 2
-                    val photos = apiService.getCuratedPhotos(page, perType).photos.map { it.toEntity() }
-                    val videos = apiService.getPopularVideos(page, perType).videos.map { it.toEntity() }
+                    val photos = apiService.getCuratedPhotos(page, perType).photos.map { it.toEntity(scope) }
+                    val videos = apiService.getPopularVideos(page, perType).videos.map { it.toEntity(scope) }
                     // 交錯合併，確保圖片與影片穿插顯示
                     buildList {
                         val maxSize = maxOf(photos.size, videos.size)
@@ -78,26 +80,16 @@ class PexelsRemoteMediator(
 
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
-                    when (mediaType) {
-                        MediaType.IMAGE -> database.mediaItemDao().clearByType(MediaType.IMAGE.name)
-                        MediaType.VIDEO -> database.mediaItemDao().clearByType(MediaType.VIDEO.name)
-                        null -> database.mediaItemDao().clearAll()
-                    }
-                    // TODO: H2 — clearAll() 無條件清空所有 RemoteKeys，若多個 pager 並存
-                    //  （back stack / 多視窗），一邊 REFRESH 會破壞另一邊的分頁狀態。
-                    //  修復方向：以 scope（IMAGE/VIDEO/MIXED）而非 mediaType 作為隔離維度，
-                    //  remote keys 改用 composite key (scope, mediaId)，DAO 提供 clearByScope()。
-                    //  注意：僅隔離 remote keys 不夠，media_items 是跨 scope 共享的，
-                    //  需一併設計 item 層的快取隔離策略，否則 scope A 的 REFRESH 仍會刪掉
-                    //  scope B 引用的 media items。
-                    database.mediaRemoteKeysDao().clearAll()
+                    // 先刪 remote keys 再刪 media items，確保子查詢不會命中空集合
+                    database.mediaRemoteKeysDao().clearByScope(scope)
+                    database.mediaItemDao().clearByScope(scope)
                 }
 
                 val prevKey = if (page == 1) null else page - 1
                 val nextKey = if (endOfPaginationReached) null else page + 1
 
                 val keys = entities.map {
-                    MediaRemoteKeys(mediaId = it.id, prevKey = prevKey, nextKey = nextKey)
+                    MediaRemoteKeys(scope = scope, mediaId = it.id, prevKey = prevKey, nextKey = nextKey)
                 }
                 database.mediaRemoteKeysDao().insertAll(keys)
                 database.mediaItemDao().insertAll(entities)
@@ -112,13 +104,13 @@ class PexelsRemoteMediator(
 
     private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, MediaItemEntity>): MediaRemoteKeys? {
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
-            ?.let { database.mediaRemoteKeysDao().remoteKeysByMediaId(it.id) }
+            ?.let { database.mediaRemoteKeysDao().remoteKeysBy(scope, it.id) }
     }
 
     private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, MediaItemEntity>): MediaRemoteKeys? {
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.id?.let {
-                database.mediaRemoteKeysDao().remoteKeysByMediaId(it)
+                database.mediaRemoteKeysDao().remoteKeysBy(scope, it)
             }
         }
     }

@@ -18,7 +18,7 @@ import com.ftwingman.android_clean_architecture_compose_gallery.data.local.entit
         MediaItemEntity::class,
         MediaRemoteKeys::class
     ],
-    version = 5,
+    version = 6,
     exportSchema = false
 )
 abstract class InfiniteMuseDatabase : RoomDatabase() {

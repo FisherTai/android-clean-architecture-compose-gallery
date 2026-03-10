@@ -13,18 +13,15 @@ interface MediaItemDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(items: List<MediaItemEntity>)
 
-    @Query("SELECT * FROM media_items ORDER BY rowid ASC")
-    fun pagingSource(): PagingSource<Int, MediaItemEntity>
-
-    @Query("SELECT * FROM media_items WHERE media_type = :mediaType ORDER BY rowid ASC")
-    fun pagingSourceByType(mediaType: String): PagingSource<Int, MediaItemEntity>
+    @Query("SELECT * FROM media_items WHERE scope = :scope ORDER BY rowid ASC")
+    fun pagingSourceByScope(scope: String): PagingSource<Int, MediaItemEntity>
 
     @Query("SELECT * FROM media_items WHERE id = :id LIMIT 1")
     suspend fun getById(id: String): MediaItemEntity?
 
+    @Query("DELETE FROM media_items WHERE scope = :scope")
+    suspend fun clearByScope(scope: String)
+
     @Query("DELETE FROM media_items")
     suspend fun clearAll()
-
-    @Query("DELETE FROM media_items WHERE media_type = :mediaType")
-    suspend fun clearByType(mediaType: String)
 }

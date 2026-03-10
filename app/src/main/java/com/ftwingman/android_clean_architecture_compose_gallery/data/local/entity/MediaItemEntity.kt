@@ -2,15 +2,18 @@ package com.ftwingman.android_clean_architecture_compose_gallery.data.local.enti
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 
 /**
  * Room Entity：Pexels 媒體項目（圖片或影片）。
- * 以 "media_type" 欄位區分，確保 Paging 快取正確運作。
+ * 以 (scope, id) 為組合主鍵，確保不同列表模式的快取資料互相隔離。
+ * scope 值為 "IMAGE"、"VIDEO" 或 "MIXED"，代表載入此項目的列表模式。
  */
-@Entity(tableName = "media_items")
+@Entity(
+    tableName = "media_items",
+    primaryKeys = ["scope", "id"]
+)
 data class MediaItemEntity(
-    @PrimaryKey
+    val scope: String,
     val id: String,
     val width: Int,
     val height: Int,

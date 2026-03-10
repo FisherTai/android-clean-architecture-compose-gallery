@@ -23,19 +23,22 @@ class MediaRepositoryImpl @Inject constructor(
 
     @OptIn(ExperimentalPagingApi::class)
     override fun getMediaItems(mediaType: MediaType?): Flow<PagingData<MediaItem>> {
+        val scope = when (mediaType) {
+            MediaType.IMAGE -> "IMAGE"
+            MediaType.VIDEO -> "VIDEO"
+            null -> "MIXED"
+        }
+
         return Pager(
             config = PagingConfig(pageSize = 20, enablePlaceholders = false),
             remoteMediator = PexelsRemoteMediator(
                 mediaType = mediaType,
+                scope = scope,
                 apiService = apiService,
                 database = database
             ),
             pagingSourceFactory = {
-                when (mediaType) {
-                    MediaType.IMAGE -> database.mediaItemDao().pagingSourceByType(MediaType.IMAGE.name)
-                    MediaType.VIDEO -> database.mediaItemDao().pagingSourceByType(MediaType.VIDEO.name)
-                    null -> database.mediaItemDao().pagingSource()
-                }
+                database.mediaItemDao().pagingSourceByScope(scope)
             }
         ).flow.map { pagingData ->
             pagingData.map { entity -> entity.toDomain() }

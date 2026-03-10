@@ -12,8 +12,11 @@ interface MediaRemoteKeysDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(keys: List<MediaRemoteKeys>)
 
-    @Query("SELECT * FROM media_remote_keys WHERE media_id = :mediaId")
-    suspend fun remoteKeysByMediaId(mediaId: String): MediaRemoteKeys?
+    @Query("SELECT * FROM media_remote_keys WHERE scope = :scope AND media_id = :mediaId")
+    suspend fun remoteKeysBy(scope: String, mediaId: String): MediaRemoteKeys?
+
+    @Query("DELETE FROM media_remote_keys WHERE scope = :scope")
+    suspend fun clearByScope(scope: String)
 
     @Query("DELETE FROM media_remote_keys")
     suspend fun clearAll()
