@@ -5,7 +5,7 @@
 本專案旨在演示如何在中型規模的應用中，透過 **Clean Architecture** 與 **MVVM** 模式，整合 **Paging 3**、**Room** 與 **Retrofit** 來實現穩健的「離線優先 (Offline-First)」架構，並結合 **Jetpack Compose** 與 **Material 3** 打造流暢且沉浸的使用者體驗。同時透過 **Media3 (ExoPlayer)** 實作影片預覽與播放功能。
 
 ### Architecture & Data (架構與數據)
-*   **Clean Architecture**: 遵守分層原則 (Domain, Data, Presentation(UI))，確保業務邏輯與框架解耦。
+*   **Clean Architecture**: 遵守分層原則 (Domain, Data, UI)，確保業務邏輯與框架解耦。
 *   **Offline-First**: 透過 **Paging 3 RemoteMediator** 實作網路與本地資料庫的單一來源 (SSOT)，支援離線瀏覽。
 *   **Dependency Injection**: 使用 **Hilt** 進行依賴注入。
 *   **Reactive Data Flow**: 使用 **Kotlin Flow** 與 **Coroutines**。
@@ -39,29 +39,32 @@
 
 ## Architecture Overview (架構圖)
 
-```mermaid  
+```mermaid  graph TD  
 graph TD
-    subgraph UI Layer
+    subgraph UI_Layer
         UI[Compose Screens] --> VM[ViewModel]
     end
 
-    subgraph Domain Layer
-        VM --> UC["UseCase(可選)"]
-        UC --> Repo[Repository Interface]
+    subgraph Domain_Layer
+        VM -.-> UC["UseCase(可選)"]
     end
 
-    subgraph Data Layer
-        RepoImpl[Repository Impl] --|implements|--> Repo
-        RepoImpl --> Mediator[RemoteMediator]
-        RepoImpl --> DAO[Room DAO] --> DB[Room Database]
-        
-        Mediator --> API[Retrofit Service]
-        Mediator --> DB[Room Database]
+    subgraph Data_Layer
+        UC --> Repo[Repository Interface]
+        VM --> Repo
 
+        RepoImpl[Repository Impl] -->|implements| Repo
+        RepoImpl --> Mediator[RemoteMediator]
+        RepoImpl --> DAO[Room DAO]
+        DAO --> DB[Room Database]
+
+        Mediator --> API[Retrofit Service]
+        Mediator --> DB
     end
 
     DB -- PagingSource --> RepoImpl
     RepoImpl -- PagingData Flow --> UC
+    RepoImpl -- PagingData Flow --> VM
 ```
 
 ## Setup & Build (如何執行)
