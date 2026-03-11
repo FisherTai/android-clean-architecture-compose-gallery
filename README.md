@@ -1,8 +1,8 @@
 # Infinite Muse - Android Clean Architecture Gallery
 
-**Infinite Muse** 是一個展示 Android 現代化開發最佳實踐的圖片瀏覽器 App。
+**Infinite Muse** 是一個展示 Android 現代化開發最佳實踐的圖片與影音瀏覽器 App。
 
-本專案旨在演示如何在中型規模的應用中，透過 **Clean Architecture** 與 **MVVM** 模式，整合 **Paging 3**、**Room** 與 **Retrofit** 來實現穩健的「離線優先 (Offline-First)」架構，並結合 **Jetpack Compose** 與 **Material 3** 打造流暢且沉浸的使用者體驗。
+本專案旨在演示如何在中型規模的應用中，透過 **Clean Architecture** 與 **MVVM** 模式，整合 **Paging 3**、**Room** 與 **Retrofit** 來實現穩健的「離線優先 (Offline-First)」架構，並結合 **Jetpack Compose** 與 **Material 3** 打造流暢且沉浸的使用者體驗。同時透過 **Media3 (ExoPlayer)** 實作影片預覽與播放功能。
 
 ### Architecture & Data (架構與數據)
 *   **Clean Architecture**: 遵守分層原則 (Domain, Data, Presentation(UI))，確保業務邏輯與框架解耦。
@@ -17,6 +17,13 @@
 *   使用圖片色調作為載入前佔位符，並實作點擊微交互。
 *   支援深色/淺色模式切換及動態取色。(Android 12+)
 
+### Video Preview (影音預覽)
+*   整合 **Pexels API** 提供影片與圖片混合瀏覽，支援僅圖片、僅影片、混合三種模式。
+*   使用 **Media3 (ExoPlayer)** 實作列表內影片自動播放，滾動偵測最靠近畫面中心的影片並切換播放。
+*   影片播放支援 **200MB LRU 快取**，詳情頁與列表頁共用快取達成快速載入。
+*   實作縮圖到播放的淡出過渡效果，以及播放器生命週期管理（頁面不可見時暫停）。
+*   透過 **scope 隔離** 解決多列表間分頁資料衝突。
+
 ## Tech Stack (技術棧)
 
 *   **Language**: Kotlin
@@ -27,6 +34,7 @@
 *   **Network**: Retrofit, OkHttp, Moshi
 *   **Database**: Room
 *   **Pagination**: Paging 3
+*   **Video**: Media3 (ExoPlayer, Cache, DataSource)
 *   **Testing**: JUnit 4, Mockk, Kotlinx Coroutines Test
 
 ## Architecture Overview (架構圖)
@@ -58,13 +66,14 @@ graph TD
 
 ## Setup & Build (如何執行)
 
-本專案使用 [Unsplash Developers](https://unsplash.com/developers) 的API
+本專案使用 [Unsplash Developers](https://unsplash.com/developers) 與 [Pexels API](https://www.pexels.com/api/) 的 API。
 
 1.  在專案根目錄建立或開啟 `local.properties` 檔案。
 2.  新增以下設定：
 
 ```properties
-UNSPLASH_ACCESS_KEY=您的_API_KEY_貼在這裡
+UNSPLASH_ACCESS_KEY=您的_Unsplash_API_KEY
+PEXELS_ACCESS_KEY=您的_Pexels_API_KEY
 ```
 
 3.  Sync Gradle 並執行專案。
