@@ -11,7 +11,6 @@ import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.PhotoUrlsDto
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.ProfileImageDto
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.UserDto
-import com.ftwingman.android_clean_architecture_compose_gallery.domain.repository.PhotoRepository
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk

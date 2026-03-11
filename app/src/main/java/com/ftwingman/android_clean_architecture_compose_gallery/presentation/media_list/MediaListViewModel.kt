@@ -14,7 +14,7 @@ import androidx.navigation.toRoute
 import androidx.paging.cachedIn
 import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.MediaItem
 import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.MediaType
-import com.ftwingman.android_clean_architecture_compose_gallery.domain.repository.MediaRepository
+import com.ftwingman.android_clean_architecture_compose_gallery.data.repository.MediaRepository
 import com.ftwingman.android_clean_architecture_compose_gallery.presentation.navigation.Route
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext

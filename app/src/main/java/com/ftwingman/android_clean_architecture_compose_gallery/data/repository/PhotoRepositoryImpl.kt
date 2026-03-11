@@ -6,13 +6,11 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.ftwingman.android_clean_architecture_compose_gallery.data.local.InfiniteMuseDatabase
-import com.ftwingman.android_clean_architecture_compose_gallery.data.local.dao.PhotoDao
 import com.ftwingman.android_clean_architecture_compose_gallery.data.mapper.toDomain
 import com.ftwingman.android_clean_architecture_compose_gallery.data.mapper.toEntity
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.PhotoRemoteMediator
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.UnsplashApiService
 import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.Photo
-import com.ftwingman.android_clean_architecture_compose_gallery.domain.repository.PhotoRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map

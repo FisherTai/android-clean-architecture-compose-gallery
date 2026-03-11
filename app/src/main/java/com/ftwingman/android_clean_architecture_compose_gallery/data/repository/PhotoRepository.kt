@@ -1,4 +1,4 @@
-package com.ftwingman.android_clean_architecture_compose_gallery.domain.repository
+package com.ftwingman.android_clean_architecture_compose_gallery.data.repository
 
 import androidx.paging.PagingData
 import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.Photo

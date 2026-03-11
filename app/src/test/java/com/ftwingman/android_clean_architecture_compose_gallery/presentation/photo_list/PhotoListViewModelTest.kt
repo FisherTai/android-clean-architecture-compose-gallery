@@ -1,7 +1,7 @@
 package com.ftwingman.android_clean_architecture_compose_gallery.presentation.photo_list
 
 import androidx.paging.PagingData
-import com.ftwingman.android_clean_architecture_compose_gallery.domain.repository.PhotoRepository
+import com.ftwingman.android_clean_architecture_compose_gallery.data.repository.PhotoRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

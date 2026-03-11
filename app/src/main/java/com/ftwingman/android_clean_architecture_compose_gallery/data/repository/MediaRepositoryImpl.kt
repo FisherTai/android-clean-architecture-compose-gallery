@@ -11,7 +11,6 @@ import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.Pexe
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.PexelsRemoteMediator
 import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.MediaItem
 import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.MediaType
-import com.ftwingman.android_clean_architecture_compose_gallery.domain.repository.MediaRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
