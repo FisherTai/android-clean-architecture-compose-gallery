@@ -10,7 +10,7 @@ import com.ftwingman.android_clean_architecture_compose_gallery.data.mapper.toDo
 import com.ftwingman.android_clean_architecture_compose_gallery.data.mapper.toEntity
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.PhotoRemoteMediator
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.UnsplashApiService
-import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.Photo
+import com.ftwingman.android_clean_architecture_compose_gallery.model.Photo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map

@@ -2,9 +2,9 @@ package com.ftwingman.android_clean_architecture_compose_gallery.data.mapper
 
 import com.ftwingman.android_clean_architecture_compose_gallery.data.local.entity.PhotoEntity
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.PhotoDto
-import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.ExifInfo
-import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.Photo
-import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.User
+import com.ftwingman.android_clean_architecture_compose_gallery.model.ExifInfo
+import com.ftwingman.android_clean_architecture_compose_gallery.model.Photo
+import com.ftwingman.android_clean_architecture_compose_gallery.model.User
 
 fun PhotoDto.toDomain(): Photo {
     return Photo(

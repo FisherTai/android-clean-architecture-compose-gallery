@@ -1,8 +1,8 @@
 package com.ftwingman.android_clean_architecture_compose_gallery.data.repository
 
 import androidx.paging.PagingData
-import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.MediaItem
-import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.MediaType
+import com.ftwingman.android_clean_architecture_compose_gallery.model.MediaItem
+import com.ftwingman.android_clean_architecture_compose_gallery.model.MediaType
 import kotlinx.coroutines.flow.Flow
 
 /**

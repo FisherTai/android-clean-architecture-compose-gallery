@@ -9,8 +9,8 @@ import com.ftwingman.android_clean_architecture_compose_gallery.data.local.Infin
 import com.ftwingman.android_clean_architecture_compose_gallery.data.mapper.toDomain
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.PexelsApiService
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.PexelsRemoteMediator
-import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.MediaItem
-import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.MediaType
+import com.ftwingman.android_clean_architecture_compose_gallery.model.MediaItem
+import com.ftwingman.android_clean_architecture_compose_gallery.model.MediaType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

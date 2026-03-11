@@ -9,7 +9,7 @@ import com.ftwingman.android_clean_architecture_compose_gallery.data.local.Infin
 import com.ftwingman.android_clean_architecture_compose_gallery.data.local.entity.MediaItemEntity
 import com.ftwingman.android_clean_architecture_compose_gallery.data.local.entity.MediaRemoteKeys
 import com.ftwingman.android_clean_architecture_compose_gallery.data.mapper.toEntity
-import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.MediaType
+import com.ftwingman.android_clean_architecture_compose_gallery.model.MediaType
 import timber.log.Timber
 
 /**

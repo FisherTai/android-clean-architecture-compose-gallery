@@ -3,8 +3,8 @@ package com.ftwingman.android_clean_architecture_compose_gallery.data.mapper
 import com.ftwingman.android_clean_architecture_compose_gallery.data.local.entity.MediaItemEntity
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.PexelsPhotoDto
 import com.ftwingman.android_clean_architecture_compose_gallery.data.remote.dto.PexelsVideoDto
-import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.MediaItem
-import com.ftwingman.android_clean_architecture_compose_gallery.domain.model.MediaType
+import com.ftwingman.android_clean_architecture_compose_gallery.model.MediaItem
+import com.ftwingman.android_clean_architecture_compose_gallery.model.MediaType
 
 // ─── Pexels Photo DTO → Entity ───────────────────────────────────────────────
 
