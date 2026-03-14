@@ -25,7 +25,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -47,8 +47,8 @@ fun MediaDetailScreen(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val mediaItem by viewModel.mediaItem.collectAsState()
-    val isLoaded by viewModel.isLoaded.collectAsState()
+    val mediaItem by viewModel.mediaItem.collectAsStateWithLifecycle()
+    val isLoaded by viewModel.isLoaded.collectAsStateWithLifecycle()
 
     // 生命週期連動：App 退到背景時暫停播放，回到前景時恢復
     val lifecycleOwner = LocalLifecycleOwner.current
